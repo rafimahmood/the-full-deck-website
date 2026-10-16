@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Full Deck — The Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E7;
+    --paper:#EFE7D6;
+    --ink:#2B2118;
+    --word:#1D4E5F;
+    --dinner:#B5791E;
+    --active:#B5482A;
+    --sp-1:8px;
+    --sp-2:16px;
+    --sp-3:24px;
+    --sp-4:32px;
+    --band-text:#F6F1E7;
+    --border-soft: rgba(43,33,24,0.25);
+    --border-faint: rgba(43,33,24,0.12);
+    --border-card: rgba(43,33,24,0.15);
+    --bg-dot: rgba(43,33,24,0.05);
+    --muted: #8a7a63;
+    --muted-strong: #5c4d3a;
+    --rules-text: #3a2e22;
+    --premium: #8B6F1F;
+    --brand: #B5482A;
+  }
+  html[data-theme="dark"]{
+    --cream:#221A12;
+    --paper:#2E251B;
+    --ink:#F3EAD9;
+    --border-soft: rgba(243,234,217,0.25);
+    --border-faint: rgba(243,234,217,0.12);
+    --border-card: rgba(243,234,217,0.15);
+    --bg-dot: rgba(243,234,217,0.05);
+    --muted: #B8A78C;
+    --muted-strong: #D8C7A8;
+    --rules-text: #EDE3D0;
+    --premium: #D4AF6A;
+    --brand: #B5482A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  html,body{ height:100%; }
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    background-image: radial-gradient(circle at 1px 1px, var(--bg-dot) 1px, transparent 0);
+    background-size: 22px 22px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100%;
+    padding: var(--sp-4) 18px 48px;
+    transition: background-color .25s ease, color .25s ease;
+  }
+
+  @keyframes cardInFade{ from{ opacity:0; transform:translateY(10px) scale(0.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
+  @keyframes cardInRight{ from{ opacity:0; transform:translateX(50px) rotate(4deg); } to{ opacity:1; transform:translateX(0) rotate(0); } }
+  @keyframes cardInLeft{ from{ opacity:0; transform:translateX(-50px) rotate(-4deg); } to{ opacity:1; transform:translateX(0) rotate(0); } }
+  .card.enter-fade{ animation: cardInFade .3s ease; }
+  .card.enter-right{ animation: cardInRight .3s ease; }
+  .card.enter-left{ animation: cardInLeft .3s ease; }
+
+  .theme-toggle{
+    position:fixed;
+    top:16px; right:16px;
+    width:38px; height:38px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:var(--paper);
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:30;
+  }
+  .theme-toggle .moon-icon{ display:none; }
+  html[data-theme="dark"] .theme-toggle .sun-icon{ display:none; }
+  html[data-theme="dark"] .theme-toggle .moon-icon{ display:block; }
+
+  .home-link{
+    position:fixed;
+    top:16px; left:16px;
+    height:38px;
+    padding:0 14px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:var(--paper);
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    z-index:30;
+  }
+
+  .icon-svg{
+    width:16px;
+    height:16px;
+    display:inline-block;
+    vertical-align:-3px;
+  }
+  .icon-svg.lg{ width:20px; height:20px; vertical-align:-5px; }
+
+  header{
+    width:100%;
+    max-width:420px;
+    text-align:center;
+    margin-bottom:var(--sp-4);
+  }
+  .logo{
+    font-family:'Alfa Slab One', serif;
+    font-size:26px;
+  }
+  .logo span{ color:var(--brand); }
+  .tagline{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    opacity:0.7;
+    margin-top:4px;
+  }
+
+  .filters{
+    width:100%;
+    max-width:420px;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:var(--sp-2);
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Space Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:11px 16px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition: all .15s;
+    opacity:0.5;
+  }
+  .chip.active{
+    opacity:1;
+    color:var(--band-text);
+    border-color:transparent;
+  }
+  .chip[data-cat="word"].active{ background:var(--word); }
+  .chip[data-cat="dinner"].active{ background:var(--dinner); }
+  .chip[data-cat="active"].active{ background:var(--active); }
+
+  .stage{
+    width:100%;
+    max-width:340px;
+    aspect-ratio: 5 / 7;
+    position:relative;
+    margin-bottom:var(--sp-3);
+  }
+
+  .card{
+    position:absolute;
+    inset:0;
+    background:var(--cream);
+    border-radius:18px;
+    border:2px solid var(--border-card);
+    box-shadow: 0 24px 50px -18px rgba(0,0,0,0.4);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    cursor:grab;
+  }
+
+  .band{
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    color:var(--band-text);
+  }
+  .band .cat-label{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+
+  .card-body{
+    flex:1;
+    padding:22px 22px 18px;
+    display:flex;
+    flex-direction:column;
+  }
+  .title{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:24px;
+    letter-spacing:-0.01em;
+    line-height:1.1;
+    margin-bottom:var(--sp-2);
+  }
+  .meta{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted-strong);
+    margin-bottom:var(--sp-2);
+    padding-bottom:var(--sp-2);
+    border-bottom:1px solid var(--border-faint);
+  }
+  .meta b{ color:var(--ink); }
+  .rules{
+    font-size:14.5px;
+    line-height:1.55;
+    color:var(--rules-text);
+    overflow-y:auto;
+    cursor:default;
+  }
+
+  .reveal-prompt{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+    padding:18px 12px;
+    border:1.5px dashed var(--border-soft);
+    border-radius:12px;
+    cursor:pointer;
+    color:var(--muted-strong);
+  }
+  .reveal-prompt .reveal-label{
+    font-size:12.5px;
+    line-height:1.4;
+  }
+  .reveal-prompt .reveal-cta{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    opacity:0.7;
+  }
+  .reveal-content{ display:none; }
+  .reveal-block.revealed .reveal-prompt{ display:none; }
+  .reveal-block.revealed .reveal-content{ display:block; }
+  .diagram-block{ margin-top:var(--sp-2); }
+
+  .premium-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    color:var(--premium);
+  }
+  .premium-tag .icon-svg{ width:11px; height:11px; }
+
+  .locked-panel{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    text-align:center;
+    padding:20px 14px;
+    border:1.5px dashed var(--premium);
+    border-radius:12px;
+    color:var(--muted-strong);
+  }
+  .locked-panel .icon-svg{ width:22px; height:22px; color:var(--premium); }
+  .locked-panel .locked-title{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:14px;
+    color:var(--premium);
+  }
+  .locked-panel .locked-desc{
+    font-size:12.5px;
+    line-height:1.4;
+  }
+
+  .empty-state{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    text-align:center;
+    padding:30px;
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    color:var(--muted);
+    cursor:pointer;
+  }
+
+  .controls{
+    width:100%;
+    max-width:340px;
+    display:flex;
+    gap:10px;
+  }
+  .btn{
+    flex:1;
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:16px 10px;
+    border-radius:100px;
+    border:none;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn-primary{ background:var(--ink); color:var(--cream); }
+  .btn-primary:active{ transform: scale(0.97); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--border-soft); flex:0 0 auto; padding:16px 18px; }
+
+  .deck-count{
+    margin-top:14px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#8a7a63;
+  }
+
+  .mode-toggle{
+    width:100%;
+    max-width:420px;
+    display:flex;
+    justify-content:center;
+    gap:var(--sp-4);
+    border-bottom:1px solid var(--border-soft);
+    margin-bottom:var(--sp-4);
+  }
+  .mode-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:0 2px var(--sp-1);
+    border:none;
+    background:transparent;
+    color:var(--ink);
+    opacity:0.5;
+    cursor:pointer;
+    position:relative;
+  }
+  .mode-btn.active{ opacity:1; }
+  .mode-btn.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:2px;
+    background:var(--active);
+  }
+
+  .list-panel{
+    width:100%;
+    max-width:420px;
+    display:none;
+    flex-direction:column;
+    gap:var(--sp-1);
+  }
+  .list-panel.visible{ display:flex; }
+  .list-row{
+    background:var(--paper);
+    border-radius:12px;
+    padding:14px 16px;
+    border-left:5px solid var(--ink);
+    cursor:pointer;
+  }
+  .list-row.word{ border-color:var(--word); }
+  .list-row.dinner{ border-color:var(--dinner); }
+  .list-row.active-cat{ border-color:var(--active); }
+  .list-row .lr-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .list-row .lr-title{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:15px;
+    letter-spacing:-0.01em;
+  }
+  .list-row .lr-chevron{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    opacity:0.4;
+    flex:0 0 auto;
+  }
+  .list-row .lr-meta{
+    font-family:'Space Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted-strong);
+    margin-top:4px;
+  }
+  .list-empty{
+    text-align:center;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    padding:30px 10px;
+  }
+
+  .list-detail{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+  }
+  .list-detail.visible{ display:flex; }
+  .detail-topbar{
+    width:100%;
+    max-width:340px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:var(--sp-2);
+  }
+  .btn-icon{
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--ink);
+    padding:4px;
+  }
+  .detail-counter{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    color:var(--muted-strong);
+  }
+  .detail-nav{
+    width:100%;
+    max-width:340px;
+    display:flex;
+    gap:10px;
+    margin-top:var(--sp-2);
+  }
+  .detail-nav .btn-ghost{ flex:1; }
+
+  footer{
+    margin-top:30px;
+    font-family:'Space Mono', monospace;
+    font-size:10px;
+    opacity:0.4;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<a class="home-link" href="index.html">
+  <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  Home
+</a>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+  <svg class="icon-svg sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="icon-svg moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+</button>
+
+<header>
+  <div class="logo">The <span>Full</span> <span>Deck</span></div>
+  <div class="tagline">Tap a category. Draw a card.</div>
+</header>
+
+<div class="filters" id="filters">
+  <button class="chip active" data-cat="all">All</button>
+  <button class="chip" data-cat="word"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Word</button>
+  <button class="chip" data-cat="dinner"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M5 12v10"/><path d="M18 2c-1.7 0-3 2.2-3 5.5S16.3 13 18 13s3-2.2 3-5.5S19.7 2 18 2z"/><path d="M18 13v9"/></svg> Dinner</button>
+  <button class="chip" data-cat="active"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> Active</button>
+</div>
+
+<div class="mode-toggle" id="modeToggle">
+  <button class="mode-btn" data-mode="random"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1" fill="currentColor" stroke="none"/></svg> Randomize</button>
+  <button class="mode-btn active" data-mode="list"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> List</button>
+</div>
+
+<div class="stage" id="stage"></div>
+
+<div class="controls" id="randomControls">
+  <button class="btn btn-primary" id="drawBtn">Draw a card</button>
+</div>
+<div class="list-panel" id="listPanel"></div>
+
+<div class="list-detail" id="listDetail">
+  <div class="detail-topbar">
+    <button class="btn-icon" id="detailBack">‹ Back to list</button>
+    <span class="detail-counter" id="detailCounter"></span>
+  </div>
+  <div class="stage" id="detailStage"></div>
+  <div class="detail-nav">
+    <button class="btn btn-ghost" id="detailPrev">‹ Prev</button>
+    <button class="btn btn-ghost" id="detailNext">Next ›</button>
+  </div>
+</div>
+
+<footer>THE FULL DECK · PRIVATE BUILD</footer>
+
+<script>
+const ICONS = {
+  word: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  dinner: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M5 12v10"/><path d="M18 2c-1.7 0-3 2.2-3 5.5S16.3 13 18 13s3-2.2 3-5.5S19.7 2 18 2z"/><path d="M18 13v9"/></svg>',
+  active: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+  lock: '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  play: '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+  star: '<svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/></svg>',
+};
+
+const CATS = {
+  word:   { label: "Word Games",   color: "var(--word)" },
+  dinner: { label: "Dinner Games", color: "var(--dinner)" },
+  active: { label: "Active",       color: "var(--active)" },
+};
+
+const GAMES = [
+  // WORD GAMES
+  { cat:"word", title:"Note Noti", players:"Any", setup:"None", spoiler:true,
+    rules:"Start by saying \"In the little town of Note Noti, there is...\" followed by a word that contains neither the letter E nor the letter I. Everyone else tries their own words to work out the hidden rule." },
+  { cat:"word", title:"Picnic", players:"Any", setup:"None", spoiler:true, free:true,
+    rules:"One player knows the hidden rule: each item must start with the last letter of the previous item (e.g. Sandwich → Hummus). Say something you're bringing to the picnic — everyone else has to catch on to the pattern themselves." },
+  { cat:"word", title:"This Is the Witch", players:"3+", setup:"None",
+    rules:"Round 1: P1 → P2: \"This is the witch.\" P2: \"The what?\" P1: \"The witch.\" P2: \"Ahh, the witch!\" Round 2: P2 → P3: \"This is the witch.\" P3: \"The what?\" (to P2) — P2 relays back to P1 — P1: \"The witch\" (to P2) — P2: \"Ahh, the witch!\" (to P3) — P3: \"Ahh, the witch!\" P3 starts the next round, adding a new player each time." },
+  { cat:"word", title:"Likes", players:"Any", setup:"None", spoiler:true, free:true,
+    rules:"One player knows the hidden rule (words with a double letter are \"liked,\" others aren't — e.g. \"I like yellow, don't like pink\"). Everyone else guesses items to test the rule until someone figures it out." },
+  { cat:"word", title:"The Moon Is in the Spoon", players:"Any", setup:"A spoon", spoiler:true,
+    rules:"Pass the spoon around while saying \"The moon is in the spoon\" as you hand it over. There's a hidden rule to doing it correctly — suggested starter rule: you must say \"thank you\" when you're passed the spoon." },
+  { cat:"word", title:"G'day Bruce", players:"4+", setup:"None",
+    rules:"Everyone in the game is named \"Bruce.\" P1 says \"G'day Bruce\" to P2. P2 replies \"G'day Bruce\" back. P1 then says \"Say g'day to Bruce Bruce,\" pointing to P3. P2 starts the next round with P3 — the chain grows each round. If you mess up, your name changes to: Sheila, Wayne, Dwayne, or Shrimp on the Barbie." },
+  { cat:"word", title:"Ibble Dibble", players:"Any", setup:"None",
+    rules:"Everyone is assigned a number. On your turn, say: \"Ibble dibble number [your number], with no ibble dibbles, calls ibble dibble number [someone else's number], with no ibble dibbles, dibble ibble.\" You can't call back the person who just called you. Mess up and you gain an \"ibble dibble\" against your name." },
+  { cat:"word", title:"Categories", players:"Any", setup:"None", free:true,
+    rules:"Call out a category (e.g. \"types of cheese\"). Going around, everyone names something that fits until someone repeats, hesitates, or can't think of one." },
+  { cat:"word", title:"Shopping List", players:"Any", setup:"None",
+    rules:"First player says \"I'm going to the shop and I'm buying [item].\" Next player repeats it and adds their own. Keep going, repeating the whole growing list each time — mess up and you're out." },
+  { cat:"word", title:"Empire", players:"6+", setup:"Slips of paper, a hat/bowl", free:true,
+    rules:"Everyone writes a name and puts it in the hat. All names get read aloud. Then, one at a time, players guess whether another player put a specific name in — guess right, and that person's name joins your empire. Biggest empire wins." },
+  { cat:"word", title:"Wavelength", players:"3+", setup:"None",
+    rules:"Everyone except one player secretly agrees on a number on a scale (e.g. 1–10, \"hot to cold\"). That one player asks the group questions, trying to work out the number from their answers." },
+
+  // DINNER GAMES
+  { cat:"dinner", title:"Toast", players:"4+", setup:"None",
+    rules:"Going around the table, everyone gives a short toast or speech about the person to their left." },
+  { cat:"dinner", title:"Psychiatrist", players:"5+", setup:"None", spoiler:true, free:true,
+    rules:"One player leaves the room. The rest agree on a secret scenario (e.g. \"everyone is pretending to be the person to their left\"). The player returns and asks questions to guess the scenario." },
+  { cat:"dinner", title:"Dinner Derby", players:"4+", setup:"Playing cards (one suit per person), William Tell Overture (music for atmosphere)", free:true,
+    rules:"Each player is secretly assigned a card suit for the night. When your suit is called out (or comes up in another game/draw), you have to sit on the lap of the person to your left." },
+  { cat:"dinner", title:"Oxford vs Cambridge", players:"6+ (even)", setup:"A fruit and a deck of cards", free:true,
+    rules:"Split into two teams facing each other, eyes closed except the two nearest the cards and the two nearest the fruit. Deal cards face-up one at a time — when a royal appears, the \"cards\" pair squeezes hands down the line to signal the \"fruit\" pair to grab it fastest." },
+  { cat:"dinner", title:"Consequences", players:"4+", setup:"One sheet of paper per player",
+    rules:"Each player writes one line of a story, folding the paper to hide it before passing on. Lines follow this order: \"Him...\", \"Her...\", \"He said...\", \"She said...\", \"They...\", \"The whole world...\". Unfold and read the whole story aloud at the end." },
+  { cat:"dinner", title:"Paranoia", players:"5+", setup:"None",
+    rules:"Whisper a question starting with \"Who in this room...\" to the person on your left. They answer by naming someone in the room. Anyone can ask \"What was the question?\" — if the person named wants to know, they take a forfeit to find out." },
+
+  // ACTIVE
+  { cat:"active", title:"Duck Duck Goose", players:"6+", setup:"Chairs in a circle",
+    rules:"One player walks around the circle, tapping heads and saying \"duck\" until they tap someone and say \"goose.\" That person chases them around — if caught before reaching the empty seat, they're \"it\" again." },
+  { cat:"active", title:"Sock Wrestling", players:"2", setup:"One sock per player", free:true,
+    rules:"Face off on hands and knees. Try to pull the other player's sock off before they get yours." },
+  { cat:"active", title:"Moo Off", players:"2", setup:"None",
+    rules:"Two players get on hands and knees, face to face, and moo at each other. First to laugh loses." },
+  { cat:"active", title:"Cereal Box Challenge", players:"2+", setup:"An empty cereal box, scissors", free:true,
+    rules:"Bend down and pick up the box using only your teeth — no hands, knees can't touch the floor. After each round, cut a slice off the top and try again." },
+  { cat:"active", title:"Bottle Reach", players:"2+", setup:"Two bottles, a line on the floor",
+    rules:"Feet stay behind the line. Reach forward as far as possible to place one bottle down, then retreat while holding the second bottle without losing balance." },
+  { cat:"active", title:"Musical Chairs", players:"4+", setup:"Chairs (one fewer than players), music",
+    rules:"Walk around the chairs while music plays. When it stops, scramble for a seat — whoever's left standing is out. Remove a chair each round." },
+  { cat:"active", title:"Newspaper Fight", players:"2", setup:"Blindfolds, a rolled-up newspaper, a bed or mat",
+    rules:"Players go one at a time. Lie down blindfolded, left arm linked with the other player's. Using only your right hand, try to hit them with the rolled newspaper." },
+  { cat:"active", title:"Feather", players:"2+", setup:"A blanket, a feather",
+    rules:"Hold the edges of a blanket taut with a feather resting on top. Blow the feather away from your side. It's fine if it lands on your side of the blanket — you only lose if it comes over your side and lands on the floor." },
+  { cat:"active", title:"Charades", players:"4+ (teams)", setup:"None", free:true,
+    rules:"Act out a movie, book, or phrase without speaking while your team guesses." },
+  { cat:"active", title:"Hat Game", players:"6+ (teams)", setup:"Slips of paper, a hat/bowl", free:true,
+    rules:"Write names on slips and put them in a hat. Teams take turns drawing names and getting teammates to guess, through four rounds: describing in words, acting it out, one word only, then acting under a blanket." },
+];
+
+let selectedCat = "all"; // "all" | "word" | "dinner" | "active"
+let mode = "list"; // "random" | "list"
+let currentCard = null;
+
+const CAT_ORDER = ["word", "dinner", "active"];
+
+function filteredGames(){
+  const games = selectedCat === "all" ? GAMES.slice() : GAMES.filter(g => g.cat === selectedCat);
+  return games.sort((a, b) => {
+    if(selectedCat === "all"){
+      const catDiff = CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat);
+      if(catDiff !== 0) return catDiff; // keep Word / Dinner / Active grouped, in that order
+    }
+    const aFree = a.free ? 0 : 1;
+    const bFree = b.free ? 0 : 1;
+    if(aFree !== bFree) return aFree - bFree; // free games first within the group
+    return a.title.localeCompare(b.title); // then alphabetical
+  });
+}
+
+const DIAGRAMS = {
+  // Add entries here later, e.g. video embeds: "Game Title": `<video ...>...</video>`
+};
+
+function renderEmpty(msg){
+  document.getElementById('stage').innerHTML =
+    `<div class="card enter-fade"><div class="empty-state">${msg}</div></div>`;
+}
+
+function cardHTML(game, enterClass){
+  const c = CATS[game.cat];
+  const rulesBlock = game.spoiler
+    ? `<div class="rules">
+         <div class="reveal-block spoiler-block">
+           <div class="reveal-prompt">
+             ${ICONS.lock}
+             <span class="reveal-label">Secret rule — only one player should look</span>
+             <span class="reveal-cta">Tap to reveal</span>
+           </div>
+           <div class="reveal-content">${game.rules}</div>
+         </div>
+       </div>`
+    : `<div class="rules">${game.rules}</div>`;
+  const diagramBlock = (game.diagram && DIAGRAMS[game.title])
+    ? `<div class="reveal-block diagram-block">
+         <div class="reveal-prompt">
+           ${ICONS.play}
+           <span class="reveal-label">See how it works</span>
+           <span class="reveal-cta">Tap to view</span>
+         </div>
+         <div class="reveal-content">${DIAGRAMS[game.title]}</div>
+       </div>`
+    : '';
+  return `
+    <div class="card ${enterClass || ''}">
+      <div class="band" style="background:${c.color}">
+        <span class="cat-label">${c.label}</span>
+        <span class="icon">${ICONS[game.cat]}</span>
+      </div>
+      <div class="card-body">
+        <div class="title">${game.title}</div>
+        <div class="meta"><span><b>Players</b> ${game.players}</span><span><b>Setup</b> ${game.setup}</span></div>
+        ${rulesBlock}
+        ${diagramBlock}
+      </div>
+    </div>
+  `;
+}
+
+function renderCard(game, enterClass){
+  document.getElementById('stage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
+}
+
+let randomHistory = [];
+let randomIndex = -1;
+
+function drawCard(enterClass){
+  const games = filteredGames();
+  if(games.length === 0){
+    renderEmpty("No games in this category yet.");
+    return;
+  }
+  const game = games[Math.floor(Math.random() * games.length)];
+  randomHistory = randomHistory.slice(0, randomIndex + 1); // drop any forward history
+  randomHistory.push(game);
+  randomIndex = randomHistory.length - 1;
+  currentCard = game;
+  renderCard(game, enterClass || 'enter-fade');
+}
+
+function randomStepForward(){
+  if(randomIndex < randomHistory.length - 1){
+    randomIndex++;
+    currentCard = randomHistory[randomIndex];
+    renderCard(currentCard, 'enter-right');
+  } else {
+    drawCard('enter-right');
+  }
+}
+
+function randomStepBack(){
+  if(randomIndex > 0){
+    randomIndex--;
+    currentCard = randomHistory[randomIndex];
+    renderCard(currentCard, 'enter-left');
+  }
+}
+
+function renderList(){
+  const games = filteredGames();
+  const panel = document.getElementById('listPanel');
+  if(games.length === 0){
+    panel.innerHTML = `<div class="list-empty">No games in this category yet.</div>`;
+    return;
+  }
+  panel.innerHTML = games.map((g, i) => {
+    const rowClass = g.cat === "active" ? "active-cat" : g.cat; // avoid clashing with .active state class
+    return `
+      <div class="list-row ${rowClass}" data-index="${i}">
+        <div class="lr-head">
+          <div>
+            <div class="lr-title">${g.title}</div>
+            <div class="lr-meta">${g.spoiler ? ICONS.lock + ' ' : ''}${(g.diagram && DIAGRAMS[g.title]) ? ICONS.play + ' ' : ''}${CATS[g.cat].label} · ${g.players} players · ${g.setup}</div>
+          </div>
+          <span class="lr-chevron">›</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('listPanel').addEventListener('click', (e) => {
+  const row = e.target.closest('.list-row');
+  if(row) openListDetail(parseInt(row.dataset.index, 10));
+});
+
+// --- List detail (big card) view with swipe/prev/next ---
+let detailIndex = 0;
+
+function renderDetailCard(enterClass){
+  const games = filteredGames();
+  if(games.length === 0) return;
+  const game = games[detailIndex];
+  document.getElementById('detailStage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
+  document.getElementById('detailCounter').textContent = `${detailIndex + 1} / ${games.length}`;
+}
+
+function openListDetail(index){
+  detailIndex = index;
+  renderDetailCard('enter-fade');
+  document.getElementById('listPanel').style.display = 'none';
+  document.getElementById('listDetail').classList.add('visible');
+}
+
+function closeListDetail(){
+  document.getElementById('listDetail').classList.remove('visible');
+  document.getElementById('listPanel').style.display = '';
+}
+
+function detailStep(delta){
+  const games = filteredGames();
+  if(games.length === 0) return;
+  detailIndex = (detailIndex + delta + games.length) % games.length; // wraps around
+  renderDetailCard(delta > 0 ? 'enter-right' : 'enter-left');
+}
+
+document.getElementById('detailBack').addEventListener('click', closeListDetail);
+document.getElementById('detailPrev').addEventListener('click', () => detailStep(-1));
+document.getElementById('detailNext').addEventListener('click', () => detailStep(1));
+
+// swipe + tap support.
+// Pointer events drive the drag-follow visual and swipe-to-navigate gesture.
+// A plain native click event handles simple taps — more reliable across browsers/previews
+// than inferring "tap" purely from pointer movement distance.
+function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
+  let startX = 0, startY = 0, dragging = false, cardEl = null, suppressNextClick = false;
+
+  container.addEventListener('pointerdown', (e) => {
+    cardEl = container.querySelector('.card');
+    if(!cardEl) return;
+    startX = e.clientX; startY = e.clientY; dragging = true;
+    cardEl.style.transition = 'none';
+  });
+
+  container.addEventListener('pointermove', (e) => {
+    if(!dragging || !cardEl) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if(Math.abs(dx) > Math.abs(dy)){
+      cardEl.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
+    }
+  });
+
+  function endDrag(e){
+    if(!dragging || !cardEl) return;
+    dragging = false;
+    const dx = (e.clientX || 0) - startX;
+    const dy = (e.clientY || 0) - startY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const el = cardEl;
+    cardEl = null;
+
+    if(dist < 10){
+      // negligible movement — let the native click event handle it as a tap
+      el.style.transition = '';
+      el.style.transform = '';
+      return;
+    }
+
+    suppressNextClick = true; // a real drag happened — don't also fire onTap from the click that follows
+
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){
+      el.style.transition = 'transform .25s ease, opacity .25s ease';
+      el.style.transform = `translateX(${dx < 0 ? -420 : 420}px) rotate(${dx < 0 ? -20 : 20}deg)`;
+      el.style.opacity = '0';
+      setTimeout(() => { if(dx < 0) onSwipeLeft(); else onSwipeRight(); }, 180);
+    } else {
+      el.style.transition = 'transform .2s ease';
+      el.style.transform = 'translateX(0) rotate(0)';
+    }
+  }
+
+  container.addEventListener('pointerup', endDrag);
+  container.addEventListener('pointercancel', endDrag);
+
+  container.addEventListener('click', () => {
+    if(suppressNextClick){ suppressNextClick = false; return; }
+    const revealEl = container.querySelector('.reveal-block:not(.revealed)');
+    if(revealEl){
+      revealEl.classList.add('revealed'); // first tap on an unrevealed block (secret rule or diagram) just reveals it
+      return;
+    }
+    if(onTap) onTap();
+  });
+}
+
+attachSwipeCard(document.getElementById('detailStage'), {
+  onSwipeLeft: () => detailStep(1),
+  onSwipeRight: () => detailStep(-1),
+});
+attachSwipeCard(document.getElementById('stage'), {
+  onSwipeLeft: randomStepForward,
+  onSwipeRight: randomStepBack,
+  onTap: randomStepForward,
+});
+
+function refreshView(){
+  closeListDetail();
+  if(mode === "random"){
+    randomHistory = [];
+    randomIndex = -1;
+    document.getElementById('stage').style.display = '';
+    document.getElementById('randomControls').style.display = 'flex';
+    document.getElementById('listPanel').classList.remove('visible');
+    renderEmpty("Draw a card!");
+  } else {
+    document.getElementById('stage').style.display = 'none';
+    document.getElementById('randomControls').style.display = 'none';
+    document.getElementById('listPanel').classList.add('visible');
+    renderList();
+  }
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedCat = chip.dataset.cat;
+    refreshView();
+  });
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    refreshView();
+  });
+});
+
+document.getElementById('drawBtn').addEventListener('click', () => drawCard());
+
+// --- theme (light/dark) ---
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  try{ localStorage.setItem('hr-theme', theme); }catch(e){}
+}
+(function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem('hr-theme'); }catch(e){}
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+})();
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// init — honor a ?cat=word|dinner|active URL param from a deep link (e.g. from the home page)
+(function initFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  const requestedCat = params.get('cat');
+  const validCats = ['word', 'dinner', 'active'];
+  if(requestedCat && validCats.includes(requestedCat)){
+    selectedCat = requestedCat;
+    document.querySelectorAll('.chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.cat === requestedCat);
+    });
+  }
+})();
+refreshView();
+</script>
+
+</body>
+</html>

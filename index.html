@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Full Deck — A party deck for every table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E7;
+    --paper:#EFE7D6;
+    --ink:#2B2118;
+    --word:#1D4E5F;
+    --dinner:#B5791E;
+    --social:#6B3F69;
+    --active:#B5482A;
+    --cardgame:#3B6E4E;
+    --brand:#B5482A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Karla', sans-serif;
+    background-image: radial-gradient(circle at 1px 1px, rgba(43,33,24,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:10;
+    background:rgba(246,241,231,0.88);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid rgba(43,33,24,0.12);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1080px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Alfa Slab One', serif;
+    font-size:22px;
+    letter-spacing:-0.01em;
+  }
+  .logo span{ color:var(--brand); }
+  .navlinks{ display:flex; gap:28px; font-family:'Space Mono', monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; }
+  .navlinks a{ text-decoration:none; opacity:0.75; transition:opacity .15s; }
+  .navlinks a:hover{ opacity:1; }
+
+  /* HERO */
+  .hero{
+    padding:88px 0 60px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+  }
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    opacity:0.6;
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:56px;
+    line-height:1.02;
+    margin-bottom:20px;
+  }
+  h1 .accent{ color:var(--active); }
+  .hero p.lead{
+    font-size:17px;
+    line-height:1.65;
+    max-width:460px;
+    color:#4a3d2f;
+    margin-bottom:32px;
+  }
+
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  .btn{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:14px 26px;
+    border-radius:100px;
+    border:none;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .btn-primary{ background:var(--ink); color:var(--cream); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid rgba(43,33,24,0.3); }
+
+  /* fanned card stack signature */
+  .stack{ position:relative; height:360px; }
+  .fan-card{
+    position:absolute; top:20px; left:50%;
+    width:210px; height:294px;
+    border-radius:14px;
+    box-shadow: 0 20px 40px -14px rgba(43,33,24,0.4);
+    border:1.5px solid rgba(43,33,24,0.15);
+    display:flex; flex-direction:column;
+  }
+  .fan-card .band{ height:46px; }
+  .fan-card .fbody{ flex:1; padding:16px; }
+  .fan-card .ftitle{ font-family:'Alfa Slab One', serif; font-size:18px; margin-bottom:8px; }
+  .fan-card .frules{ font-size:11px; line-height:1.5; color:#4a3d2f; }
+  .fan-card.c1{ background:var(--active); transform: translate(-50%, 0) rotate(-11deg); z-index:1; }
+  .fan-card.c2{ background:var(--cream); transform: translate(-70%, 14px) rotate(-2deg); z-index:2; }
+  .fan-card.c2 .band{ background:var(--dinner); }
+  .fan-card.c3{ background:var(--cream); transform: translate(-32%, 26px) rotate(9deg); z-index:3; }
+  .fan-card.c3 .band{ background:var(--word); }
+
+  /* SECTION: what's inside */
+  section{ padding:64px 0; }
+  .section-head{ max-width:560px; margin-bottom:44px; }
+  .section-head .eyebrow{ margin-bottom:12px; }
+  h2{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:34px;
+    line-height:1.1;
+    margin-bottom:14px;
+  }
+  .section-head p{ font-size:15.5px; line-height:1.6; color:#4a3d2f; }
+
+  .cat-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap:18px;
+  }
+  .cat-card{
+    display:block;
+    background:var(--paper);
+    border-radius:14px;
+    padding:22px;
+    border-left:6px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .cat-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -14px rgba(43,33,24,0.35);
+  }
+  .cat-card h3{
+    font-family:'Alfa Slab One', serif;
+    font-weight:400;
+    font-size:19px;
+    margin-bottom:8px;
+  }
+  .cat-card p{ font-size:13.5px; line-height:1.55; color:#4a3d2f; margin-bottom:10px; }
+  .cat-card .cat-cta{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    opacity:0.6;
+  }
+  .cat-card.word{ border-color:var(--word); }
+  .cat-card.dinner{ border-color:var(--dinner); }
+  .cat-card.active{ border-color:var(--active); }
+  .cat-card.cardgame{ border-color:var(--cardgame); }
+
+  /* HOW IT WORKS */
+  .how{ background:var(--paper); }
+  .steps{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:32px;
+    counter-reset: step;
+  }
+  .step{ position:relative; padding-left:44px; }
+  .step::before{
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    position:absolute; left:0; top:0;
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    font-weight:700;
+    color:var(--active);
+  }
+  .step h4{ font-family:'Alfa Slab One', serif; font-size:16px; font-weight:400; margin-bottom:6px; }
+  .step p{ font-size:13.5px; line-height:1.55; color:#4a3d2f; }
+
+  /* SIGNUP */
+  .signup{ text-align:center; }
+  .signup .wrap{ max-width:560px; }
+  .signup h2{ font-size:36px; }
+  .signup p{ font-size:15.5px; color:#4a3d2f; margin-bottom:28px; }
+  .signup-form{
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+  }
+  .signup-form input[type="email"]{
+    flex:1; min-width:220px;
+    padding:14px 18px;
+    border-radius:100px;
+    border:1.5px solid rgba(43,33,24,0.25);
+    background:var(--cream);
+    font-family:'Karla', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .signup-form input[type="email"]::placeholder{ color:#8a7a63; }
+  .form-note{
+    margin-top:14px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    color:#8a7a63;
+  }
+
+  footer{
+    padding:36px 0 48px;
+    border-top:1px solid rgba(43,33,24,0.12);
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  footer .logo{ font-size:16px; }
+  footer .fine{ font-family:'Space Mono', monospace; font-size:11px; opacity:0.55; }
+
+  @media (max-width: 780px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    h1{ font-size:38px; }
+    .stack{ height:300px; margin-top:20px; }
+    .fan-card{ width:170px; height:238px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">The <span>Full</span> <span>Deck</span></div>
+    <div class="navlinks">
+      <a href="#whats-inside">What's Inside</a>
+      <a href="#how">How It Works</a>
+      <a href="deck-app.html">Play Now</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">A party card deck — launching soon</div>
+      <h1 style="letter-spacing:-0.02em;">One deck.<br>Five ways to <span class="accent">play.</span></h1>
+      <p class="lead">House Rules is a deck of party games sorted by categories — Word Games, Dinner Games, Active, and Card Games. Shuffle the whole thing, or pull a category to match your table's mood.</p>
+      <div class="cta-row">
+        <a href="deck-app.html" class="btn btn-primary">Play the deck</a>
+        <a href="#signup" class="btn btn-ghost">Get notified</a>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="fan-card c1">
+        <div class="band"></div>
+        <div class="fbody">
+          <div class="ftitle">Around the World</div>
+          <div class="frules">Name a country. Next player names one starting with your last letter. No repeats.</div>
+        </div>
+      </div>
+      <div class="fan-card c2">
+        <div class="band"></div>
+        <div class="fbody">
+          <div class="ftitle">Dinner Derby</div>
+          <div class="frules">Everyone's secretly assigned a suit. When it's called, sit on the lap to your left.</div>
+        </div>
+      </div>
+      <div class="fan-card c3">
+        <div class="band"></div>
+        <div class="fbody">
+          <div class="ftitle">Categories</div>
+          <div class="frules">Call out a category — types of cheese, say. Everyone names something that fits until someone stumbles.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="whats-inside">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What's inside</div>
+      <h2>Four categories. No two nights the same.</h2>
+      <p>Every card is color-coded and readable from either side of the table — pull a category to fit the room, or shuffle the whole deck and let it decide for you.</p>
+    </div>
+    <div class="cat-grid">
+      <a class="cat-card word" href="deck-app.html?cat=word">
+        <h3>Word Games</h3>
+        <p>Riddles, rhythm games, and hidden rules for players who like figuring things out.</p>
+        <span class="cat-cta">Play Word Games →</span>
+      </a>
+      <a class="cat-card dinner" href="deck-app.html?cat=dinner">
+        <h3>Dinner Games</h3>
+        <p>Games built for a table that isn't going anywhere for a while.</p>
+        <span class="cat-cta">Play Dinner Games →</span>
+      </a>
+      <a class="cat-card active" href="deck-app.html?cat=active">
+        <h3>Active</h3>
+        <p>Up-and-moving games for when the room has energy to burn.</p>
+        <span class="cat-cta">Play Active →</span>
+      </a>
+      <a class="cat-card cardgame" href="deck-app.html">
+        <h3>Card Games</h3>
+        <p>Classic card game rules, reformatted so no one has to Google them mid-party.</p>
+        <span class="cat-cta">Coming soon →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How it works</div>
+      <h2>No setup, no rulebook to lose.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Shuffle</h4>
+        <p>Mix the whole deck, or split by category if your table wants a specific kind of night.</p>
+      </div>
+      <div class="step">
+        <h4>Draw a card</h4>
+        <p>Everything you need — players, setup, rules — fits in a glance.</p>
+      </div>
+      <div class="step">
+        <h4>Play</h4>
+        <p>No rulebook to dig for mid-game — the card has everything, so you can just play and enjoy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="signup" id="signup">
+  <div class="wrap">
+    <div class="eyebrow">Launching soon</div>
+    <h2>Be first to know when the next deck drops.</h2>
+    <p>We'll email you once — when The Full Deck is ready to order. No spam, no drip campaign.</p>
+    <form class="signup-form" onsubmit="event.preventDefault(); alert('This is a template — connect a real signup form (Mailchip, Google Form, etc.) before launch.');">
+      <input type="email" placeholder="you@email.com" required>
+      <button type="submit" class="btn btn-primary">Notify me</button>
+    </form>
+    <div class="form-note">NO SPAM · UNSUBSCRIBE ANYTIME · <a href="privacy.html" style="color:inherit; text-decoration:underline;">Terms &amp; Privacy</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">The <span style="color:var(--brand);">Full</span> <span style="color:var(--brand);">Deck</span></div>
+    <div class="fine">&copy; 2026 The Full Deck. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
