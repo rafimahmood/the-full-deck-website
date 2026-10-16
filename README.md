@@ -1,6 +1,6 @@
 # The Full Deck — Website
 
-The website for **The Full Deck**, a party card game: a deck of drinking and party games for every table.
+The website for **The Full Deck**, a party card game: a deck of party games for every table.
 
 ## Pages
 
