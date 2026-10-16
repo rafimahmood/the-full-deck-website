@@ -12,4 +12,4 @@ It's a plain static site (HTML, CSS and a little JavaScript) with no build step.
 
 ## Hosting
 
-The site is hosted on [Netlify](https://www.netlify.com/). This repo holds the source only; GitHub Pages is not used.
+The site is hosted on [Netlify](https://www.netlify.com/) and deploys automatically on every push to `main`. GitHub Pages is not used.
