@@ -1,5 +1,7 @@
 # The Full Deck — Website
 
+**Live site:** https://thefulldeck.netlify.app
+
 The website for **The Full Deck**, a party card game: a deck of party games for every table.
 
 ## Pages
