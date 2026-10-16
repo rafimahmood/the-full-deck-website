@@ -5,7 +5,7 @@ The website for **The Full Deck**, a party card game: a deck of party games for 
 ## Pages
 
 - `index.html`: landing page introducing the deck, with a sign-up form
-- `111.html`: the deck itself, where you browse the cards and their rules
+- `deck-app.html`: the deck itself, where you browse the cards and their rules
 - `privacy.html`: terms and privacy
 
 It's a plain static site (HTML, CSS and a little JavaScript) with no build step.
