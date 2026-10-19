@@ -6,11 +6,54 @@ The website for **The Full Deck**, a party card game: a deck of party games for 
 
 ## Pages
 
-- `index.html`: landing page introducing the deck, with a sign-up form
+- `index.html`: landing page introducing the deck, with the Mailchimp sign-up form
 - `deck-app.html`: the deck itself, where you browse the cards and their rules
 - `privacy.html`: terms and privacy
 
-It's a plain static site (HTML, CSS and a little JavaScript) with no build step.
+The pages are plain static HTML, CSS and a little JavaScript with no build step. The one dynamic piece is the sign-up form, which talks to a small Netlify Function (see below).
+
+## Sign-up flow
+
+The "Notify me" form on `index.html` adds people to a Mailchimp audience.
+
+```
+Browser (index.html)  ──POST /api/subscribe {email, company}──►  netlify/functions/subscribe.ts  ──►  Mailchimp Marketing API
+        ▲                                                                   │
+        └──────────── { ok, alreadySubscribed, message } ◄─────────────────┘
+```
+
+1. **The page** shows real states: *Sending…* (button disabled), *You're on the list* (success), or a clear error message with the form kept so people can retry. It also validates the address before sending.
+2. **The function** (`netlify/functions/subscribe.ts`, TypeScript) validates the email again on the server, then calls `POST /lists/{audience}/members` with status `subscribed`.
+   - Someone who is already on the audience gets a friendly *"You're already on the list"* success.
+   - A hidden **honeypot** field (`company`) catches bots: if it's filled in, the function reports success but never contacts Mailchimp.
+   - Only POST requests from this site are accepted, bodies are size-limited, and Mailchimp failures are translated into short messages (invalid email, busy, try later). API keys and raw Mailchimp responses are never sent to the browser.
+3. **Mailchimp** receives the subscriber. If an address previously unsubscribed, Mailchimp does not allow it to be re-added through the API, and the visitor is told to get in touch.
+
+### Configuration (secrets are never committed)
+
+The function reads three environment variables. They are already set in Netlify (**Site configuration → Environment variables**, Functions scope):
+
+| Variable | What it is |
+| --- | --- |
+| `MAILCHIMP_API_KEY` | Marketing API key (Account → Extras → API keys) |
+| `MAILCHIMP_AUDIENCE_ID` | Audience ID (Audience → Settings → Audience name and defaults) |
+| `MAILCHIMP_SERVER_PREFIX` | Data centre prefix, the part after the dash in the key, e.g. `us21` |
+
+`.env` is git-ignored; `.env.example` lists the names only. CI also fails if something that looks like a Mailchimp key is committed. If a key is ever exposed, rotate it in Mailchimp and update the Netlify variable.
+
+### Run it locally
+
+```bash
+npm install
+cp .env.example .env          # fill in your values; never commit this file
+npx netlify-cli dev           # site and function on http://localhost:8888
+npm test                      # function tests (Mailchimp is mocked)
+npm run typecheck
+```
+
+### Tests and CI
+
+`tests/subscribe.test.ts` covers email validation, the Mailchimp request, the "already subscribed" case, the honeypot, origin and method checks, missing configuration, and every Mailchimp error mapping, with a mocked `fetch`. GitHub Actions (`.github/workflows/ci.yml`) runs a secret scan, the typecheck and the tests on every push.
 
 ## Hosting
 
