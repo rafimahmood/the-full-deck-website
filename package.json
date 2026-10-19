@@ -6,7 +6,9 @@
   "description": "The Full Deck website: static pages plus a Netlify Function that adds sign-ups to Mailchimp.",
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "serve": "python3 -m http.server 8080"
   },
   "engines": {
     "node": ">=22"
