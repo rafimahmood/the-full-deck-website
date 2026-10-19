@@ -239,6 +239,18 @@
     cursor:default;
   }
 
+  .rules .r-line{ margin:0 0 var(--sp-2); }
+  .rules .r-label{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted-strong);
+    margin-right:6px;
+  }
+  .rules ol{ margin:0 0 var(--sp-2); padding-left:1.3em; }
+  .rules li{ margin-bottom:2px; }
+
   .reveal-prompt{
     display:flex;
     flex-direction:column;
@@ -544,30 +556,40 @@ const CATS = {
   active: { label: "Active",       color: "var(--active)" },
 };
 
+// Structured rules: Goal / How to play / Ends / Example
+const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function R({goal, steps, ends, example}){
+  return `<p class="r-line"><span class="r-label">Goal</span>${esc(goal)}</p>`
+    + `<div class="r-line"><span class="r-label">How to play</span></div>`
+    + `<ol>${steps.map(t => `<li>${esc(t)}</li>`).join("")}</ol>`
+    + `<p class="r-line"><span class="r-label">Ends</span>${esc(ends)}</p>`
+    + (example ? `<p class="r-line"><span class="r-label">Example</span>${esc(example)}</p>` : "");
+}
+
 const GAMES = [
   // WORD GAMES
   { cat:"word", title:"Note Noti", players:"Any", setup:"None", spoiler:true,
-    rules:"Start by saying \"In the little town of Note Noti, there is...\" followed by a word that contains neither the letter E nor the letter I. Everyone else tries their own words to work out the hidden rule." },
+    rules:R({"goal": "Work out the starter's secret rule.", "steps": ["The starter says \"In the little town of Note Noti, there is...\" and adds a word. The secret rule is that the word has no E and no I.", "Everyone else takes turns saying the sentence with their own word.", "The starter says only \"right\" or \"wrong\". They never explain why."], "ends": "When everyone has worked out the rule.", "example": "\"...there is a puppy\" is right. \"...there is a pie\" is wrong."}) },
   { cat:"word", title:"Picnic", players:"Any", setup:"None", spoiler:true, free:true,
-    rules:"One player knows the hidden rule: each item must start with the last letter of the previous item (e.g. Sandwich → Hummus). Say something you're bringing to the picnic — everyone else has to catch on to the pattern themselves." },
+    rules:R({"goal": "Work out the knower's secret rule.", "steps": ["One player (the knower) secretly decides the rule: each item must start with the last letter of the previous item.", "They start: \"I'm bringing to the picnic a sandwich.\"", "Everyone else takes turns saying \"I'm bringing to the picnic...\" plus an item.", "The knower says only \"yes\" or \"no\"."], "ends": "When everyone has worked out the rule.", "example": "Sandwich → Hummus → Soup."}) },
   { cat:"word", title:"This Is the Witch", players:"3+", setup:"None",
-    rules:"Round 1: P1 → P2: \"This is the witch.\" P2: \"The what?\" P1: \"The witch.\" P2: \"Ahh, the witch!\" Round 2: P2 → P3: \"This is the witch.\" P3: \"The what?\" (to P2) — P2 relays back to P1 — P1: \"The witch\" (to P2) — P2: \"Ahh, the witch!\" (to P3) — P3: \"Ahh, the witch!\" P3 starts the next round, adding a new player each time." },
+    rules:R({"goal": "Pass the phrase down the line without slipping up.", "steps": ["Player 1 says to Player 2, \"This is the witch.\" Player 2 asks \"The what?\", Player 1 says \"The witch,\" and Player 2 replies \"Ahh, the witch!\"", "Next round, Player 2 passes it to Player 3. Player 3 asks \"The what?\", Player 2 relays the question back to Player 1, and the answer travels forward again.", "Each round adds one more player, and the newest player starts the next round."], "ends": "Whenever you like. There's no real end."}) },
   { cat:"word", title:"Likes", players:"Any", setup:"None", spoiler:true, free:true,
-    rules:"One player knows the hidden rule (words with a double letter are \"liked,\" others aren't — e.g. \"I like yellow, don't like pink\"). Everyone else guesses items to test the rule until someone figures it out." },
+    rules:R({"goal": "Work out what the knower likes.", "steps": ["One player (the knower) secretly decides the rule: they like things with a double letter in the name.", "They say, \"I like yellow, I don't like pink.\"", "Everyone else tries \"Do you like...?\" and the knower says only \"yes\" or \"no\"."], "ends": "When everyone has worked out the rule."}) },
   { cat:"word", title:"The Moon Is in the Spoon", players:"Any", setup:"A spoon", spoiler:true,
-    rules:"Pass the spoon around while saying \"The moon is in the spoon\" as you hand it over. There's a hidden rule to doing it correctly — suggested starter rule: you must say \"thank you\" when you're passed the spoon." },
+    rules:R({"goal": "Work out the secret rule for passing the spoon.", "steps": ["One player (the knower) picks a secret rule. A good one to start with is \"say thank you when you're handed the spoon\".", "Pass the spoon around, saying \"The moon is in the spoon\" as you hand it over.", "The knower stays in the game and says \"right\" or \"wrong\" after each pass."], "ends": "When everyone has worked out the rule."}) },
   { cat:"word", title:"G'day Bruce", players:"4+", setup:"None",
-    rules:"Everyone in the game is named \"Bruce.\" P1 says \"G'day Bruce\" to P2. P2 replies \"G'day Bruce\" back. P1 then says \"Say g'day to Bruce Bruce,\" pointing to P3. P2 starts the next round with P3 — the chain grows each round. If you mess up, your name changes to: Sheila, Wayne, Dwayne, or Shrimp on the Barbie." },
+    rules:R({"goal": "Keep the greeting chain going without a mistake.", "steps": ["Everyone is named Bruce.", "Player 1 says \"G'day Bruce\" to Player 2, who says it back. Player 1 then points at Player 3 and says \"Say g'day to Bruce Bruce.\"", "Player 2 starts the next round with Player 3, and the chain grows each round.", "If you mess up, you take a new name: Sheila, Wayne, Dwayne, or Shrimp on the Barbie."], "ends": "When people want to stop."}) },
   { cat:"word", title:"Ibble Dibble", players:"Any", setup:"None",
-    rules:"Everyone is assigned a number. On your turn, say: \"Ibble dibble number [your number], with no ibble dibbles, calls ibble dibble number [someone else's number], with no ibble dibbles, dibble ibble.\" You can't call back the person who just called you. Mess up and you gain an \"ibble dibble\" against your name." },
+    rules:R({"goal": "Keep the calling going without a slip.", "steps": ["Everyone gets a number.", "On your turn, say \"Ibble dibble number [yours], with no ibble dibbles, calls ibble dibble number [theirs], with no ibble dibbles, dibble ibble.\"", "You can't call back the person who just called you.", "Mess up and you gain an \"ibble dibble\" against your name."], "ends": "When people want to stop."}) },
   { cat:"word", title:"Categories", players:"Any", setup:"None", free:true,
-    rules:"Call out a category (e.g. \"types of cheese\"). Going around, everyone names something that fits until someone repeats, hesitates, or can't think of one." },
+    rules:R({"goal": "Keep naming things without slipping.", "steps": ["Someone picks a category, such as \"types of cheese\".", "Going around, everyone names something that fits.", "If anyone repeats, hesitates, or can't think of one, the round ends and the next category starts."], "ends": "When people want to stop."}) },
   { cat:"word", title:"Shopping List", players:"Any", setup:"None",
-    rules:"First player says \"I'm going to the shop and I'm buying [item].\" Next player repeats it and adds their own. Keep going, repeating the whole growing list each time — mess up and you're out." },
+    rules:R({"goal": "Remember the whole list.", "steps": ["The first player says \"I'm going to the shop and I'm buying [item].\"", "The next player repeats it and adds their own item.", "Keep going, repeating the whole growing list each turn."], "ends": "If you get it wrong you're out. The last player left wins."}) },
   { cat:"word", title:"Empire", players:"6+", setup:"Slips of paper, a hat/bowl", free:true,
-    rules:"Everyone writes a name and puts it in the hat. All names get read aloud. Then, one at a time, players guess whether another player put a specific name in — guess right, and that person's name joins your empire. Biggest empire wins." },
+    rules:R({"goal": "Build an empire that holds everyone.", "steps": ["Everyone writes a name on a slip and puts it in the hat. The name can be a famous person or anyone they know. All the names are read out loud.", "On your turn, point at a player and ask \"Are they [name]?\" You're guessing which name that player wrote.", "If you're right, that player joins your empire. Their slips don't become yours, but they help you work out who the other people are. You also get another turn.", "If you're wrong, the player you asked gets to guess next."], "ends": "When one person's empire holds everyone. That person wins."}) },
   { cat:"word", title:"Wavelength", players:"3+", setup:"None",
-    rules:"Everyone except one player secretly agrees on a number on a scale (e.g. 1–10, \"hot to cold\"). That one player asks the group questions, trying to work out the number from their answers." },
+    rules:R({"goal": "Guess the secret number.", "steps": ["Everyone except the guesser secretly agrees on a number from 1 to 10.", "The guesser gets 3 questions to ask the group.", "After the third question, the guesser names the number."], "ends": "The guesser wins if the number is right."}) },
 
   // DINNER GAMES
   { cat:"dinner", title:"Toast", players:"4+", setup:"None",
