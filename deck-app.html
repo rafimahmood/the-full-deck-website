@@ -163,6 +163,7 @@
     color:var(--band-text);
     border-color:transparent;
   }
+  .chip[data-cat="all"].active{ background:var(--ink); color:var(--cream); }
   .chip[data-cat="word"].active{ background:var(--word); }
   .chip[data-cat="dinner"].active{ background:var(--dinner); }
   .chip[data-cat="active"].active{ background:var(--active); }
@@ -170,9 +171,14 @@
   .stage{
     width:100%;
     max-width:340px;
-    aspect-ratio: 5 / 7;
     position:relative;
     margin-bottom:var(--sp-3);
+  }
+  /* The card is at least 5:7 and grows with long rules. */
+  .stage .card{
+    position:relative;
+    inset:auto;
+    min-height:calc(min(340px, 100vw - 36px) * 7 / 5);
   }
 
   .card{
@@ -263,6 +269,7 @@
     cursor:pointer;
     color:var(--muted-strong);
   }
+  .reveal-prompt .icon-svg{ width:22px; height:22px; }
   .reveal-prompt .reveal-label{
     font-size:12.5px;
     line-height:1.4;
@@ -314,7 +321,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    height:100%;
+    flex:1;
     text-align:center;
     padding:30px;
     font-family:'Space Mono', monospace;
@@ -481,6 +488,141 @@
   }
   .detail-nav .btn-ghost{ flex:1; }
 
+  .card{ touch-action:pan-y; }
+  .title-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:var(--sp-2);
+  }
+  .title-row .title{ margin-bottom:0; }
+  .share-btn{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:7px 11px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .share-btn:hover{ background:var(--paper); }
+
+  .filter-bar{
+    width:100%;
+    max-width:420px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:var(--sp-1);
+  }
+  .fb-field{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--muted-strong);
+  }
+  .fb-field select{
+    font-family:'Karla', sans-serif;
+    font-size:16px;
+    padding:8px 12px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .toggle-chip{
+    font-family:'Space Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:11px 16px;
+    border-radius:100px;
+    border:1.5px solid var(--border-soft);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    opacity:0.6;
+  }
+  .toggle-chip[aria-pressed="true"]{ opacity:1; background:var(--ink); color:var(--cream); border-color:transparent; }
+  .result-count{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:var(--sp-2);
+  }
+  .lr-secret{ white-space:nowrap; }
+  .list-empty .btn-icon{ margin-top:var(--sp-1); text-decoration:underline; }
+
+  .fs{
+    position:fixed;
+    inset:0;
+    z-index:25;
+    display:flex;
+    flex-direction:column;
+    padding:64px 14px 14px;
+    background:var(--cream);
+    background-image: radial-gradient(circle at 1px 1px, var(--bg-dot) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  .fs[hidden]{ display:none; }
+  .fs-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:0 4px var(--sp-1);
+  }
+  .fs-hint{
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--muted-strong);
+  }
+  .fs-stage{ position:relative; flex:1; min-height:0; }
+  .fs-stage .card{ position:absolute; inset:0; min-height:0; }
+  .fs .card-body, .fs .rules{ min-height:0; }
+  .fs-stage .rules{ font-size:16px; flex:1; }
+  .fs-nav{ display:flex; gap:10px; margin-top:var(--sp-1); }
+  .fs-nav .btn-ghost{ flex:1; padding:13px 10px; }
+
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:28px;
+    transform:translate(-50%, 20px);
+    max-width:calc(100% - 36px);
+    padding:11px 18px;
+    border-radius:100px;
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.03em;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:40;
+    overflow-wrap:anywhere;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+
   footer{
     margin-top:30px;
     font-family:'Space Mono', monospace;
@@ -514,6 +656,20 @@
   <button class="chip" data-cat="active"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> Active</button>
 </div>
 
+<div class="filter-bar" id="filterBar">
+  <label class="fb-field">How many of you?
+    <select id="playersSelect" aria-label="How many of you?">
+      <option value="">Any number</option>
+      <option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+      <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+      <option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option>
+      <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+    </select>
+  </label>
+  <button class="toggle-chip" type="button" id="noEquipBtn" aria-pressed="false">No equipment needed</button>
+</div>
+<div class="result-count" id="resultCount" aria-live="polite"></div>
+
 <div class="mode-toggle" id="modeToggle">
   <button class="mode-btn" data-mode="random"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1" fill="currentColor" stroke="none"/></svg> Randomize</button>
   <button class="mode-btn active" data-mode="list"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> List</button>
@@ -524,6 +680,7 @@
 <div class="controls" id="randomControls">
   <button class="btn btn-primary" id="drawBtn">Draw a card</button>
 </div>
+<div class="deck-count" id="deckCount"></div>
 <div class="list-panel" id="listPanel"></div>
 
 <div class="list-detail" id="listDetail">
@@ -538,16 +695,37 @@
   </div>
 </div>
 
+<div class="fs" id="fs" hidden>
+  <div class="fs-bar">
+    <button class="btn-icon" type="button" id="fsClose">✕ Close</button>
+    <span class="fs-hint" id="fsHint"></span>
+  </div>
+  <div class="fs-stage" id="fsStage"></div>
+  <div class="fs-nav">
+    <button class="btn btn-ghost" type="button" id="fsPrev">‹ Prev</button>
+    <button class="btn btn-ghost" type="button" id="fsNext">Next ›</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <footer>THE FULL DECK</footer>
 
-<script>
+<script type="module">
+import { Deck, NO_FILTERS, findGameById, listSetup, parseShareHash, rulesHTML, shareHash, shareUrl, visibleGames } from './js/deck.js';
+import { GAMES } from './js/games.js';
+
+const $ = (id) => document.getElementById(id);
+const svg = (inner, cls = 'icon-svg') =>
+  `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+
 const ICONS = {
-  word: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-  dinner: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M5 12v10"/><path d="M18 2c-1.7 0-3 2.2-3 5.5S16.3 13 18 13s3-2.2 3-5.5S19.7 2 18 2z"/><path d="M18 13v9"/></svg>',
-  active: '<svg class="icon-svg lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
-  lock: '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
-  play: '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
-  star: '<svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/></svg>',
+  word: svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', 'icon-svg lg'),
+  dinner: svg('<path d="M3 2v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M5 12v10"/><path d="M18 2c-1.7 0-3 2.2-3 5.5S16.3 13 18 13s3-2.2 3-5.5S19.7 2 18 2z"/><path d="M18 13v9"/>', 'icon-svg lg'),
+  active: svg('<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>', 'icon-svg lg'),
+  eye: svg('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
+  play: svg('<polygon points="5 3 19 12 5 21 5 3"/>'),
+  link: svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
 };
 
 const CATS = {
@@ -556,96 +734,12 @@ const CATS = {
   active: { label: "Active",       color: "var(--active)" },
 };
 
-// Structured rules: Goal / How to play / Ends / Example
-const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
-function R({goal, steps, ends, example}){
-  return `<p class="r-line"><span class="r-label">Goal</span>${esc(goal)}</p>`
-    + `<div class="r-line"><span class="r-label">How to play</span></div>`
-    + `<ol>${steps.map(t => `<li>${esc(t)}</li>`).join("")}</ol>`
-    + `<p class="r-line"><span class="r-label">Ends</span>${esc(ends)}</p>`
-    + (example ? `<p class="r-line"><span class="r-label">Example</span>${esc(example)}</p>` : "");
-}
-
-const GAMES = [
-  // WORD GAMES
-  { cat:"word", title:"Note Noti", players:"Any", setup:"None", spoiler:true,
-    rules:R({"goal": "Work out the starter's secret rule.", "steps": ["The starter says \"In the little town of Note Noti, there is...\" and adds a word. The secret rule is that the word has no E and no I.", "Everyone else takes turns saying the sentence with their own word.", "The starter says only \"right\" or \"wrong\". They never explain why."], "ends": "When everyone has worked out the rule.", "example": "\"...there is a puppy\" is right. \"...there is a pie\" is wrong."}) },
-  { cat:"word", title:"Picnic", players:"Any", setup:"None", spoiler:true, free:true,
-    rules:R({"goal": "Work out the knower's secret rule.", "steps": ["One player (the knower) secretly decides the rule: each item must start with the last letter of the previous item.", "They start: \"I'm bringing to the picnic a sandwich.\"", "Everyone else takes turns saying \"I'm bringing to the picnic...\" plus an item.", "The knower says only \"yes\" or \"no\"."], "ends": "When everyone has worked out the rule.", "example": "Sandwich → Hummus → Soup."}) },
-  { cat:"word", title:"This Is the Witch", players:"3+", setup:"None",
-    rules:R({"goal": "Pass the phrase down the line without slipping up.", "steps": ["Player 1 says to Player 2, \"This is the witch.\" Player 2 asks \"The what?\", Player 1 says \"The witch,\" and Player 2 replies \"Ahh, the witch!\"", "Next round, Player 2 passes it to Player 3. Player 3 asks \"The what?\", Player 2 relays the question back to Player 1, and the answer travels forward again.", "Each round adds one more player, and the newest player starts the next round."], "ends": "Whenever you like. There's no real end."}) },
-  { cat:"word", title:"Likes", players:"Any", setup:"None", spoiler:true, free:true,
-    rules:R({"goal": "Work out what the knower likes.", "steps": ["One player (the knower) secretly decides the rule: they like things with a double letter in the name.", "They say, \"I like yellow, I don't like pink.\"", "Everyone else tries \"Do you like...?\" and the knower says only \"yes\" or \"no\"."], "ends": "When everyone has worked out the rule."}) },
-  { cat:"word", title:"The Moon Is in the Spoon", players:"Any", setup:"A spoon", spoiler:true,
-    rules:R({"goal": "Work out the secret rule for passing the spoon.", "steps": ["One player (the knower) picks a secret rule. A good one to start with is \"say thank you when you're handed the spoon\".", "Pass the spoon around, saying \"The moon is in the spoon\" as you hand it over.", "The knower stays in the game and says \"right\" or \"wrong\" after each pass."], "ends": "When everyone has worked out the rule."}) },
-  { cat:"word", title:"G'day Bruce", players:"4+", setup:"None",
-    rules:R({"goal": "Keep the greeting chain going without a mistake.", "steps": ["Everyone is named Bruce.", "Player 1 says \"G'day Bruce\" to Player 2, who says it back. Player 1 then points at Player 3 and says \"Say g'day to Bruce Bruce.\"", "Player 2 starts the next round with Player 3, and the chain grows each round.", "If you mess up, you take a new name: Sheila, Wayne, Dwayne, or Shrimp on the Barbie."], "ends": "When people want to stop."}) },
-  { cat:"word", title:"Ibble Dibble", players:"Any", setup:"None",
-    rules:R({"goal": "Keep the calling going without a slip.", "steps": ["Everyone gets a number.", "On your turn, say \"Ibble dibble number [yours], with no ibble dibbles, calls ibble dibble number [theirs], with no ibble dibbles, dibble ibble.\"", "You can't call back the person who just called you.", "Mess up and you gain an \"ibble dibble\" against your name."], "ends": "When people want to stop."}) },
-  { cat:"word", title:"Categories", players:"Any", setup:"None", free:true,
-    rules:R({"goal": "Keep naming things without slipping.", "steps": ["Someone picks a category, such as \"types of cheese\".", "Going around, everyone names something that fits.", "If anyone repeats, hesitates, or can't think of one, the round ends and the next category starts."], "ends": "When people want to stop."}) },
-  { cat:"word", title:"Shopping List", players:"Any", setup:"None",
-    rules:R({"goal": "Remember the whole list.", "steps": ["The first player says \"I'm going to the shop and I'm buying [item].\"", "The next player repeats it and adds their own item.", "Keep going, repeating the whole growing list each turn."], "ends": "If you get it wrong you're out. The last player left wins."}) },
-  { cat:"word", title:"Empire", players:"6+", setup:"Slips of paper, a hat/bowl", free:true,
-    rules:R({"goal": "Build an empire that holds everyone.", "steps": ["Everyone writes a name on a slip and puts it in the hat. The name can be a famous person or anyone they know. All the names are read out loud.", "On your turn, point at a player and ask \"Are they [name]?\" You're guessing which name that player wrote.", "If you're right, that player joins your empire. Their slips don't become yours, but they help you work out who the other people are. You also get another turn.", "If you're wrong, the player you asked gets to guess next."], "ends": "When one person's empire holds everyone. That person wins."}) },
-  { cat:"word", title:"Wavelength", players:"3+", setup:"None",
-    rules:R({"goal": "Guess the secret number.", "steps": ["Everyone except the guesser secretly agrees on a number from 1 to 10.", "The guesser gets 3 questions to ask the group.", "After the third question, the guesser names the number."], "ends": "The guesser wins if the number is right."}) },
-
-  // DINNER GAMES
-  { cat:"dinner", title:"Toast", players:"4+", setup:"None",
-    rules:R({"goal": "Make the person on your left feel good.", "steps": ["Pick someone to go first.", "Going around the table, each person gives a short toast or speech about the person on their left."], "ends": "When everyone has had a turn."}) },
-  { cat:"dinner", title:"Psychiatrist", players:"5+", setup:"None", spoiler:true, free:true,
-    rules:R({"goal": "The guesser works out the secret scenario.", "steps": ["One player (the guesser) leaves the room.", "The rest agree on a secret scenario, such as \"everyone answers as if they're the person on their left\".", "The guesser comes back and asks as many questions as they like. Everyone answers according to the scenario."], "ends": "When the guesser works out the scenario.", "example": "Asked \"What's your favourite food?\", everyone answers as the person on their left would."}) },
-  { cat:"dinner", title:"Dinner Derby", players:"4+", setup:"Playing cards (one suit per person), William Tell Overture (music for atmosphere)", free:true,
-    rules:R({"goal": "Be the first to make it all the way round the table back to your own seat.", "steps": ["Each player gets a card suit.", "A host calls out suits. When your suit is called, you sit on the lap of the person to your left.", "The host plays the William Tell Overture, which gets louder as the game goes on."], "ends": "When someone gets back around to their own seat."}) },
-  { cat:"dinner", title:"Oxford vs Cambridge", players:"6+ (even)", setup:"A fruit and a deck of cards", free:true,
-    rules:R({"goal": "Be the first team back to your starting seats.", "steps": ["Split into two equal teams, Oxford and Cambridge, sitting in two lines facing each other and holding hands along the line.", "A host deals the cards face-up one at a time. The two players nearest the cards (one from each team) and the two nearest the fruit (one from each team) keep their eyes open. Everyone else closes their eyes.", "When a royal (jack, queen or king) appears, the players nearest the cards squeeze the hand next to them. The squeeze passes down the line to the players at the fruit.", "The players nearest the fruit grab it as fast as they can. The team that grabs it shuffles down one seat, and the player at the end goes round to the front.", "If someone grabs the fruit when there was no royal, the other team shuffles down one seat instead."], "ends": "The first team back in its original seats wins."}) },
-  { cat:"dinner", title:"Consequences", players:"4+", setup:"One sheet of paper per player",
-    rules:R({"goal": "Write a silly story together without seeing what the others wrote.", "steps": ["Everyone gets a sheet of paper.", "Write one line to match the prompt, then fold the paper to hide it and pass it to your left. The prompts go in this order: \"Him...\", \"Her...\", \"He said...\", \"She said...\", \"They...\", \"The whole world...\".", "Keep passing left each time until every sheet has six lines. With fewer than six players, the sheets just keep going round."], "ends": "Unfold the papers and read each story aloud."}) },
-  { cat:"dinner", title:"Paranoia", players:"5+", setup:"None",
-    rules:R({"goal": "Find out who the question was about.", "steps": ["Whisper a question starting with \"Who in this room...\" to the person on your left.", "They answer out loud by naming someone in the room.", "The person named can ask \"What was the question?\" To find out, they take a forfeit."], "ends": "When people want to stop."}) },
-
-  // ACTIVE
-  { cat:"active", title:"Duck Duck Goose", players:"6+", setup:"Chairs in a circle",
-    rules:R({"goal": "Get round the circle and into the empty seat without being caught.", "steps": ["Everyone sits in a circle. One player is \"it\" and walks around the outside.", "\"It\" taps each head, saying \"duck\", until they tap one and say \"goose\".", "The goose jumps up and chases \"it\" round the circle. \"It\" tries to reach the goose's empty seat first.", "If \"it\" is caught before reaching the seat, \"it\" goes again. Otherwise the goose is the new \"it\"."], "ends": "When people want to stop."}) },
-  { cat:"active", title:"Sock Wrestling", players:"2", setup:"One sock per player", free:true,
-    rules:R({"goal": "Pull off the other player's sock.", "steps": ["Two players each wear one sock and face off on hands and knees.", "Try to pull the other player's sock off before they get yours."], "ends": "The first to pull the other's sock off wins."}) },
-  { cat:"active", title:"Moo Off", players:"2", setup:"None",
-    rules:R({"goal": "Be the last to laugh.", "steps": ["Two players get on hands and knees, face to face.", "Moo at each other."], "ends": "The first one to laugh loses."}) },
-  { cat:"active", title:"Cereal Box Challenge", players:"2+", setup:"An empty cereal box, scissors", free:true,
-    rules:R({"goal": "Be the last one who can still pick up the box.", "steps": ["Stand an empty cereal box on the floor.", "Bend down and pick it up using only your teeth. No hands, and your knees can't touch the floor.", "After each round, cut a slice off the top of the box and go again.", "If you can't pick it up, you're out."], "ends": "The last player left wins."}) },
-  { cat:"active", title:"Bottle Reach", players:"2+", setup:"Two bottles, a line on the floor",
-    rules:R({"goal": "Place your bottle further forward than everyone else.", "steps": ["Keep your feet behind the line.", "Hold a bottle in each hand and reach forward as far as you can.", "Put one bottle down, then pull back to standing while holding the second, without losing your balance."], "ends": "The player whose bottle is placed furthest forward wins."}) },
-  { cat:"active", title:"Musical Chairs", players:"4+", setup:"Chairs (one fewer than players), music",
-    rules:R({"goal": "Be the last one with a seat.", "steps": ["Set out chairs in a circle, one fewer than the number of players.", "Walk around the chairs while the music plays.", "When the music stops, scramble for a seat. Whoever is left standing is out.", "Remove one chair each round."], "ends": "The last player left wins."}) },
-  { cat:"active", title:"Newspaper Fight", players:"2", setup:"Blindfolds, a rolled-up newspaper, a bed or mat",
-    rules:R({"goal": "Hit the other player with the newspaper.", "steps": ["Both players lie down blindfolded (on a bed, a mat, or the floor) with their left arms linked.", "Players go one at a time. Using only your right hand, try to hit the other player with the rolled-up newspaper."], "ends": "When you want to stop."}) },
-  { cat:"active", title:"Feather", players:"2+", setup:"A blanket, a feather",
-    rules:R({"goal": "Keep the feather from landing on the floor on your side.", "steps": ["Everyone holds the edges of a blanket taut with a feather resting on top.", "Blow the feather away from your side.", "It's fine if it lands on your side of the blanket. You only lose if it comes over your side and lands on the floor.", "The loser goes out and the rest keep playing."], "ends": "When one player is left. They win."}) },
-  { cat:"active", title:"Charades", players:"2+", setup:"None", free:true,
-    rules:R({"goal": "Get everyone else to guess what you're acting out.", "steps": ["Pick someone to go first.", "They act out a movie, book or phrase without speaking while everyone else guesses.", "Take turns."], "ends": "When people want to stop."}) },
-  { cat:"active", title:"Hat Game", players:"6+ (teams)", setup:"Slips of paper, a hat/bowl", free:true,
-    rules:R({"goal": "Get the most names guessed across all four rounds.", "steps": ["Everyone writes names on slips and puts them in a hat. The same slips are used for every round.", "Split into teams. Teams take turns drawing a name and getting their teammates to guess it.", "Round 1: describe it in words. Round 2: act it out. Round 3: say one word only. Round 4: act it out under a blanket."], "ends": "After the fourth round. The team with the most names guessed across all rounds wins."}) },
-];
-
-let selectedCat = "all"; // "all" | "word" | "dinner" | "active"
+const filters = { ...NO_FILTERS };
 let mode = "list"; // "random" | "list"
-let currentCard = null;
-
-const CAT_ORDER = ["word", "dinner", "active"];
+const phone = window.matchMedia('(max-width: 640px)');
 
 function filteredGames(){
-  const games = selectedCat === "all" ? GAMES.slice() : GAMES.filter(g => g.cat === selectedCat);
-  return games.sort((a, b) => {
-    if(selectedCat === "all"){
-      const catDiff = CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat);
-      if(catDiff !== 0) return catDiff; // keep Word / Dinner / Active grouped, in that order
-    }
-    const aFree = a.free ? 0 : 1;
-    const bFree = b.free ? 0 : 1;
-    if(aFree !== bFree) return aFree - bFree; // free games first within the group
-    return a.title.localeCompare(b.title); // then alphabetical
-  });
+  return visibleGames(GAMES, filters);
 }
 
 const DIAGRAMS = {
@@ -653,7 +747,7 @@ const DIAGRAMS = {
 };
 
 function renderEmpty(msg){
-  document.getElementById('stage').innerHTML =
+  $('stage').innerHTML =
     `<div class="card enter-fade"><div class="empty-state">${msg}</div></div>`;
 }
 
@@ -663,14 +757,14 @@ function cardHTML(game, enterClass){
     ? `<div class="rules">
          <div class="reveal-block spoiler-block">
            <div class="reveal-prompt">
-             ${ICONS.lock}
-             <span class="reveal-label">Secret rule — only one player should look</span>
+             ${ICONS.eye}
+             <span class="reveal-label">Secret rule: one player peeks, everyone else looks away.</span>
              <span class="reveal-cta">Tap to reveal</span>
            </div>
-           <div class="reveal-content">${game.rules}</div>
+           <div class="reveal-content">${rulesHTML(game.rules)}</div>
          </div>
        </div>`
-    : `<div class="rules">${game.rules}</div>`;
+    : `<div class="rules">${rulesHTML(game.rules)}</div>`;
   const diagramBlock = (game.diagram && DIAGRAMS[game.title])
     ? `<div class="reveal-block diagram-block">
          <div class="reveal-prompt">
@@ -688,7 +782,10 @@ function cardHTML(game, enterClass){
         <span class="icon">${ICONS[game.cat]}</span>
       </div>
       <div class="card-body">
-        <div class="title">${game.title}</div>
+        <div class="title-row">
+          <div class="title">${game.title}</div>
+          <button class="share-btn" type="button" data-share="${game.id}" aria-label="Copy a link to ${game.title}">${ICONS.link} Share</button>
+        </div>
         <div class="meta"><span><b>Players</b> ${game.players}</span><span><b>Setup</b> ${game.setup}</span></div>
         ${rulesBlock}
         ${diagramBlock}
@@ -697,32 +794,55 @@ function cardHTML(game, enterClass){
   `;
 }
 
-function renderCard(game, enterClass){
-  document.getElementById('stage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
-}
-
+// --- Randomize: a deck that never repeats until every card has been drawn ---
+let deck = new Deck([]);
 let randomHistory = [];
 let randomIndex = -1;
+let currentCard = null;
+
+function resetRandom(){
+  deck = new Deck(filteredGames());
+  randomHistory = [];
+  randomIndex = -1;
+  currentCard = null;
+  updateDeckCount();
+}
+
+function updateDeckCount(){
+  const el = $('deckCount');
+  if(deck.size === 0){ el.textContent = ''; return; }
+  const left = `${deck.remaining} of ${deck.size} cards left in the deck`;
+  el.textContent = left;
+  $('fsHint').textContent = `Swipe for next · ${deck.remaining} left`;
+}
+
+function showRandomCard(game, enterClass){
+  currentCard = game;
+  if(phone.matches){
+    openFs();
+    $('fsStage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
+  } else {
+    $('stage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
+  }
+  updateDeckCount();
+}
 
 function drawCard(enterClass){
-  const games = filteredGames();
-  if(games.length === 0){
-    renderEmpty("No games in this category yet.");
+  const game = deck.draw();
+  if(!game){
+    renderEmpty(emptyMessage());
     return;
   }
-  const game = games[Math.floor(Math.random() * games.length)];
   randomHistory = randomHistory.slice(0, randomIndex + 1); // drop any forward history
   randomHistory.push(game);
   randomIndex = randomHistory.length - 1;
-  currentCard = game;
-  renderCard(game, enterClass || 'enter-fade');
+  showRandomCard(game, enterClass);
 }
 
 function randomStepForward(){
   if(randomIndex < randomHistory.length - 1){
     randomIndex++;
-    currentCard = randomHistory[randomIndex];
-    renderCard(currentCard, 'enter-right');
+    showRandomCard(randomHistory[randomIndex], 'enter-right');
   } else {
     drawCard('enter-right');
   }
@@ -731,26 +851,54 @@ function randomStepForward(){
 function randomStepBack(){
   if(randomIndex > 0){
     randomIndex--;
-    currentCard = randomHistory[randomIndex];
-    renderCard(currentCard, 'enter-left');
+    showRandomCard(randomHistory[randomIndex], 'enter-left');
   }
+}
+
+// --- Full-screen card on phones ---
+function openFs(){
+  $('fs').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeFs(){
+  if($('fs').hidden) return;
+  $('fs').hidden = true;
+  document.body.style.overflow = '';
+  if(currentCard && mode === 'random') $('stage').innerHTML = cardHTML(currentCard, 'enter-fade');
+}
+$('fsClose').addEventListener('click', closeFs);
+$('fsPrev').addEventListener('click', randomStepBack);
+$('fsNext').addEventListener('click', randomStepForward);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeFs(); });
+phone.addEventListener('change', () => { if(!phone.matches) closeFs(); });
+
+// --- List ---
+function emptyMessage(){
+  return 'No games fit that. Try a different number of players, or turn off a filter.';
+}
+
+function updateResultCount(){
+  const n = filteredGames().length;
+  const narrowed = filters.cat !== 'all' || filters.players !== null || filters.noEquipment;
+  $('resultCount').textContent = `${n} game${n === 1 ? '' : 's'}${narrowed ? ` of ${GAMES.length}` : ''}`;
 }
 
 function renderList(){
   const games = filteredGames();
-  const panel = document.getElementById('listPanel');
+  const panel = $('listPanel');
   if(games.length === 0){
-    panel.innerHTML = `<div class="list-empty">No games in this category yet.</div>`;
+    panel.innerHTML = `<div class="list-empty">${emptyMessage()}<br><button class="btn-icon" type="button" data-reset>Clear filters</button></div>`;
     return;
   }
   panel.innerHTML = games.map((g, i) => {
     const rowClass = g.cat === "active" ? "active-cat" : g.cat; // avoid clashing with .active state class
+    const secret = g.spoiler ? `<span class="lr-secret" title="Secret rule: tap to reveal">${ICONS.eye} Secret rule</span> · ` : '';
     return `
       <div class="list-row ${rowClass}" data-index="${i}">
         <div class="lr-head">
           <div>
             <div class="lr-title">${g.title}</div>
-            <div class="lr-meta">${g.spoiler ? ICONS.lock + ' ' : ''}${(g.diagram && DIAGRAMS[g.title]) ? ICONS.play + ' ' : ''}${CATS[g.cat].label} · ${g.players} players · ${g.setup}</div>
+            <div class="lr-meta">${secret}${(g.diagram && DIAGRAMS[g.title]) ? ICONS.play + ' ' : ''}${CATS[g.cat].label} · ${g.players} players · ${listSetup(g)}</div>
           </div>
           <span class="lr-chevron">›</span>
         </div>
@@ -759,7 +907,8 @@ function renderList(){
   }).join('');
 }
 
-document.getElementById('listPanel').addEventListener('click', (e) => {
+$('listPanel').addEventListener('click', (e) => {
+  if(e.target.closest('[data-reset]')){ resetFilters(); return; }
   const row = e.target.closest('.list-row');
   if(row) openListDetail(parseInt(row.dataset.index, 10));
 });
@@ -767,24 +916,30 @@ document.getElementById('listPanel').addEventListener('click', (e) => {
 // --- List detail (big card) view with swipe/prev/next ---
 let detailIndex = 0;
 
+function setHash(game){
+  try{ history.replaceState(null, '', game ? shareHash(game) : location.pathname + location.search); }catch(e){}
+}
+
 function renderDetailCard(enterClass){
   const games = filteredGames();
   if(games.length === 0) return;
   const game = games[detailIndex];
-  document.getElementById('detailStage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
-  document.getElementById('detailCounter').textContent = `${detailIndex + 1} / ${games.length}`;
+  $('detailStage').innerHTML = cardHTML(game, enterClass || 'enter-fade');
+  $('detailCounter').textContent = `${detailIndex + 1} / ${games.length}`;
+  setHash(game);
 }
 
 function openListDetail(index){
   detailIndex = index;
   renderDetailCard('enter-fade');
-  document.getElementById('listPanel').style.display = 'none';
-  document.getElementById('listDetail').classList.add('visible');
+  $('listPanel').style.display = 'none';
+  $('listDetail').classList.add('visible');
 }
 
 function closeListDetail(){
-  document.getElementById('listDetail').classList.remove('visible');
-  document.getElementById('listPanel').style.display = '';
+  if($('listDetail').classList.contains('visible')) setHash(null);
+  $('listDetail').classList.remove('visible');
+  $('listPanel').style.display = '';
 }
 
 function detailStep(delta){
@@ -794,21 +949,21 @@ function detailStep(delta){
   renderDetailCard(delta > 0 ? 'enter-right' : 'enter-left');
 }
 
-document.getElementById('detailBack').addEventListener('click', closeListDetail);
-document.getElementById('detailPrev').addEventListener('click', () => detailStep(-1));
-document.getElementById('detailNext').addEventListener('click', () => detailStep(1));
+$('detailBack').addEventListener('click', closeListDetail);
+$('detailPrev').addEventListener('click', () => detailStep(-1));
+$('detailNext').addEventListener('click', () => detailStep(1));
 
 // swipe + tap support.
 // Pointer events drive the drag-follow visual and swipe-to-navigate gesture.
 // A plain native click event handles simple taps — more reliable across browsers/previews
 // than inferring "tap" purely from pointer movement distance.
 function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
-  let startX = 0, startY = 0, dragging = false, cardEl = null, suppressNextClick = false;
+  let startX = 0, startY = 0, dragging = false, captured = false, cardEl = null, suppressNextClick = false;
 
   container.addEventListener('pointerdown', (e) => {
     cardEl = container.querySelector('.card');
     if(!cardEl) return;
-    startX = e.clientX; startY = e.clientY; dragging = true;
+    startX = e.clientX; startY = e.clientY; dragging = true; captured = false;
     cardEl.style.transition = 'none';
   });
 
@@ -816,19 +971,35 @@ function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
     if(!dragging || !cardEl) return;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
+    if(!captured && Math.abs(dx) + Math.abs(dy) > 10){
+      // keep receiving events if the pointer leaves the card mid-drag (captured only once it is a drag, so plain taps still click normally)
+      try{ container.setPointerCapture(e.pointerId); captured = true; }catch(err){}
+    }
     if(Math.abs(dx) > Math.abs(dy)){
       cardEl.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
     }
   });
 
+  function snapBack(el){
+    el.style.transition = 'transform .2s ease';
+    el.style.transform = 'translateX(0) rotate(0)';
+  }
+
   function endDrag(e){
     if(!dragging || !cardEl) return;
     dragging = false;
-    const dx = (e.clientX || 0) - startX;
-    const dy = (e.clientY || 0) - startY;
-    const dist = Math.sqrt(dx * dx + dy * dy);
     const el = cardEl;
     cardEl = null;
+
+    if(e.type === 'pointercancel'){ // the browser took over (e.g. a vertical scroll) — not a swipe
+      snapBack(el);
+      suppressNextClick = true;
+      return;
+    }
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
 
     if(dist < 10){
       // negligible movement — let the native click event handle it as a tap
@@ -845,15 +1016,15 @@ function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
       el.style.opacity = '0';
       setTimeout(() => { if(dx < 0) onSwipeLeft(); else onSwipeRight(); }, 180);
     } else {
-      el.style.transition = 'transform .2s ease';
-      el.style.transform = 'translateX(0) rotate(0)';
+      snapBack(el);
     }
   }
 
   container.addEventListener('pointerup', endDrag);
   container.addEventListener('pointercancel', endDrag);
 
-  container.addEventListener('click', () => {
+  container.addEventListener('click', (e) => {
+    if(e.target.closest('[data-share]')) return; // the share button handles itself
     if(suppressNextClick){ suppressNextClick = false; return; }
     const revealEl = container.querySelector('.reveal-block:not(.revealed)');
     if(revealEl){
@@ -864,52 +1035,116 @@ function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
   });
 }
 
-attachSwipeCard(document.getElementById('detailStage'), {
+attachSwipeCard($('detailStage'), {
   onSwipeLeft: () => detailStep(1),
   onSwipeRight: () => detailStep(-1),
 });
-attachSwipeCard(document.getElementById('stage'), {
+attachSwipeCard($('stage'), {
   onSwipeLeft: randomStepForward,
   onSwipeRight: randomStepBack,
   onTap: randomStepForward,
 });
+attachSwipeCard($('fsStage'), {
+  onSwipeLeft: randomStepForward,
+  onSwipeRight: randomStepBack, // no tap-to-advance here: long rules scroll, so taps would be easy to hit by accident
+});
 
+// --- Share ---
+let toastTimer;
+function toast(msg){
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }catch(e){}
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;left:-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }catch(e){ return false; }
+}
+
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-share]');
+  if(!btn) return;
+  const game = findGameById(GAMES, btn.dataset.share);
+  if(!game) return;
+  const url = shareUrl(window.location.href, game);
+  setHash(game); // the address bar now holds the link too
+  toast(await copyText(url) ? 'Link copied' : `Copy this link: ${url}`);
+});
+
+// --- Filters and views ---
 function refreshView(){
   closeListDetail();
-  if(mode === "random"){
-    randomHistory = [];
-    randomIndex = -1;
-    document.getElementById('stage').style.display = '';
-    document.getElementById('randomControls').style.display = 'flex';
-    document.getElementById('listPanel').classList.remove('visible');
-    renderEmpty("Draw a card!");
+  closeFs();
+  updateResultCount();
+  const random = mode === "random";
+  $('stage').style.display = random ? '' : 'none';
+  $('randomControls').style.display = random ? 'flex' : 'none';
+  $('deckCount').style.display = random ? '' : 'none';
+  $('listPanel').classList.toggle('visible', !random);
+  if(random){
+    resetRandom();
+    renderEmpty(filteredGames().length ? "Draw a card!" : emptyMessage());
   } else {
-    document.getElementById('stage').style.display = 'none';
-    document.getElementById('randomControls').style.display = 'none';
-    document.getElementById('listPanel').classList.add('visible');
     renderList();
   }
 }
 
+function syncFilterControls(){
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === filters.cat));
+  $('playersSelect').value = filters.players === null ? '' : String(filters.players);
+  $('noEquipBtn').setAttribute('aria-pressed', String(filters.noEquipment));
+}
+
+function resetFilters(){
+  Object.assign(filters, NO_FILTERS);
+  syncFilterControls();
+  refreshView();
+}
+
+function setMode(next){
+  mode = next;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === next));
+}
+
 document.querySelectorAll('.chip').forEach(chip => {
   chip.addEventListener('click', () => {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    selectedCat = chip.dataset.cat;
+    filters.cat = chip.dataset.cat;
+    syncFilterControls();
     refreshView();
   });
+});
+
+$('playersSelect').addEventListener('change', (e) => {
+  filters.players = e.target.value === '' ? null : parseInt(e.target.value, 10);
+  refreshView();
+});
+
+$('noEquipBtn').addEventListener('click', () => {
+  filters.noEquipment = !filters.noEquipment;
+  syncFilterControls();
+  refreshView();
 });
 
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    mode = btn.dataset.mode;
+    setMode(btn.dataset.mode);
     refreshView();
   });
 });
 
-document.getElementById('drawBtn').addEventListener('click', () => drawCard());
+$('drawBtn').addEventListener('click', () => drawCard());
 
 // --- theme (light/dark) ---
 function applyTheme(theme){
@@ -922,24 +1157,33 @@ function applyTheme(theme){
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(saved || (prefersDark ? 'dark' : 'light'));
 })();
-document.getElementById('themeToggle').addEventListener('click', () => {
+$('themeToggle').addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   applyTheme(current === 'dark' ? 'light' : 'dark');
 });
 
-// init — honor a ?cat=word|dinner|active URL param from a deep link (e.g. from the home page)
+// --- opening a link: #g=<game id> shows that game; ?cat=word|dinner|active picks a category ---
+function openFromHash(){
+  const id = parseShareHash(window.location.hash);
+  if(id === null) return false;
+  const game = findGameById(GAMES, id);
+  if(!game){ toast("That game link doesn't match a game."); return false; }
+  Object.assign(filters, NO_FILTERS); // the linked game must not be hidden by a filter
+  setMode('list');
+  syncFilterControls();
+  refreshView();
+  openListDetail(filteredGames().findIndex(g => g.id === game.id));
+  return true;
+}
+
 (function initFromURL(){
-  const params = new URLSearchParams(window.location.search);
-  const requestedCat = params.get('cat');
-  const validCats = ['word', 'dinner', 'active'];
-  if(requestedCat && validCats.includes(requestedCat)){
-    selectedCat = requestedCat;
-    document.querySelectorAll('.chip').forEach(c => {
-      c.classList.toggle('active', c.dataset.cat === requestedCat);
-    });
-  }
+  const requestedCat = new URLSearchParams(window.location.search).get('cat');
+  if(['word', 'dinner', 'active'].includes(requestedCat)) filters.cat = requestedCat;
+  syncFilterControls();
+  refreshView();
+  openFromHash();
 })();
-refreshView();
+window.addEventListener('hashchange', openFromHash);
 </script>
 
 </body>
