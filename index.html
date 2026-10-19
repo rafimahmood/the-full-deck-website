@@ -217,6 +217,21 @@
     color:var(--ink);
   }
   .signup-form input[type="email"]::placeholder{ color:#8a7a63; }
+  .signup-form .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .sr-only{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .signup-form input[type="email"]:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; border-color:var(--brand); }
+  .signup-form input[aria-invalid="true"]{ border-color:var(--active); }
+  .signup-form button:disabled{ opacity:.65; cursor:progress; transform:none; box-shadow:none; }
+  .signup-status{
+    min-height:1.5em; margin:14px auto 0 !important; font-size:15px !important; font-weight:500; color:#4a3d2f;
+  }
+  .signup-status.error{ color:var(--active); }
+  .signup-done{
+    display:inline-flex; align-items:center; gap:12px; padding:16px 26px; border-radius:100px;
+    background:var(--cream); border:1.5px solid var(--cardgame); color:var(--cardgame);
+    font-family:'Alfa Slab One', serif; font-size:22px;
+  }
+  .signup-done svg{ flex:none; }
   .form-note{
     margin-top:14px;
     font-family:'Space Mono', monospace;
@@ -353,10 +368,13 @@
     <div class="eyebrow">Launching soon</div>
     <h2>Be first to know when the next deck drops.</h2>
     <p>We'll email you once — when The Full Deck is ready to order. No spam, no drip campaign.</p>
-    <form class="signup-form" onsubmit="event.preventDefault(); alert('This is a template — connect a real signup form (Mailchip, Google Form, etc.) before launch.');">
-      <input type="email" placeholder="you@email.com" required>
-      <button type="submit" class="btn btn-primary">Notify me</button>
+    <form class="signup-form" id="signup-form" action="/api/subscribe" method="post" novalidate>
+      <label class="sr-only" for="signup-email">Email address</label>
+      <input id="signup-email" name="email" type="email" placeholder="you@email.com" required autocomplete="email" inputmode="email" maxlength="254">
+      <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>
+      <button type="submit" class="btn btn-primary" id="signup-btn">Notify me</button>
     </form>
+    <p class="signup-status" id="signup-status" role="status" aria-live="polite"></p>
     <div class="form-note">NO SPAM · UNSUBSCRIBE ANYTIME · <a href="privacy.html" style="color:inherit; text-decoration:underline;">Terms &amp; Privacy</a></div>
   </div>
 </section>
@@ -367,6 +385,70 @@
     <div class="fine">&copy; 2026 The Full Deck. All rights reserved.</div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var form = document.getElementById('signup-form');
+  if(!form) return;
+  var input = document.getElementById('signup-email');
+  var btn = document.getElementById('signup-btn');
+  var status = document.getElementById('signup-status');
+  var label = btn.textContent;
+  var busy = false;
+
+  function say(msg, isError){
+    status.textContent = msg || '';
+    status.classList.toggle('error', !!isError);
+    input.setAttribute('aria-invalid', isError ? 'true' : 'false');
+  }
+  function done(message){
+    var el = document.createElement('div');
+    el.className = 'signup-done';
+    el.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span></span>';
+    el.lastChild.textContent = message;
+    form.replaceWith(el);
+    status.textContent = "We'll email you once, when the deck is ready to order.";
+    status.classList.remove('error');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(busy) return;
+    var email = input.value.trim();
+    if(!email || !input.checkValidity()){
+      say('Please enter a valid email address.', true);
+      input.focus();
+      return;
+    }
+    busy = true;
+    btn.disabled = true;
+    btn.textContent = 'Sending\u2026';
+    say('Sending\u2026', false);
+
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, 15000);
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, company: form.elements.company.value }),
+      signal: controller.signal
+    }).then(function(res){
+      return res.json().catch(function(){ return null; }).then(function(data){ return { res: res, data: data }; });
+    }).then(function(r){
+      if(r.res.ok && r.data && r.data.ok){ done(r.data.alreadySubscribed ? "You're already on the list" : "You're on the list"); return; }
+      say((r.data && r.data.message) || 'Something went wrong. Please try again.', true);
+      input.focus();
+    }).catch(function(){
+      say("We couldn't reach the sign-up service. Check your connection and try again.", true);
+    }).then(function(){
+      clearTimeout(timer);
+      busy = false;
+      if(document.body.contains(btn)){ btn.disabled = false; btn.textContent = label; }
+    });
+  });
+  input.addEventListener('input', function(){ if(status.classList.contains('error')) say('', false); });
+})();
+</script>
 
 </body>
 </html>
