@@ -150,4 +150,87 @@ Final approved rules text, category by category. Gameplay was not changed, only 
   3. The person named can ask "What was the question?" To find out, they take a forfeit.
 - Ends: When people want to stop.
 
-## Active (pending)
+## Active (approved)
+
+**Duck Duck Goose**
+- Goal: Get round the circle and into the empty seat without being caught.
+- How to play:
+  1. Everyone sits in a circle. One player is "it" and walks around the outside.
+  2. "It" taps each head, saying "duck", until they tap one and say "goose".
+  3. The goose jumps up and chases "it" round the circle. "It" tries to reach the goose's empty seat first.
+  4. If "it" is caught before reaching the seat, "it" goes again. Otherwise the goose is the new "it".
+- Ends: When people want to stop.
+
+**Sock Wrestling**
+- Goal: Pull off the other player's sock.
+- How to play:
+  1. Two players each wear one sock and face off on hands and knees.
+  2. Try to pull the other player's sock off before they get yours.
+- Ends: The first to pull the other's sock off wins.
+
+**Moo Off**
+- Goal: Be the last to laugh.
+- How to play:
+  1. Two players get on hands and knees, face to face.
+  2. Moo at each other.
+- Ends: The first one to laugh loses.
+
+**Cereal Box Challenge**
+- Goal: Be the last one who can still pick up the box.
+- How to play:
+  1. Stand an empty cereal box on the floor.
+  2. Bend down and pick it up using only your teeth. No hands, and your knees can't touch the floor.
+  3. After each round, cut a slice off the top of the box and go again.
+  4. If you can't pick it up, you're out.
+- Ends: The last player left wins.
+
+**Bottle Reach**
+- Goal: Place your bottle further forward than everyone else.
+- How to play:
+  1. Keep your feet behind the line.
+  2. Hold a bottle in each hand and reach forward as far as you can.
+  3. Put one bottle down, then pull back to standing while holding the second, without losing your balance.
+- Ends: The player whose bottle is placed furthest forward wins.
+
+**Musical Chairs**
+- Goal: Be the last one with a seat.
+- How to play:
+  1. Set out chairs in a circle, one fewer than the number of players.
+  2. Walk around the chairs while the music plays.
+  3. When the music stops, scramble for a seat. Whoever is left standing is out.
+  4. Remove one chair each round.
+- Ends: The last player left wins.
+
+**Newspaper Fight**
+- Goal: Hit the other player with the newspaper.
+- How to play:
+  1. Both players lie down blindfolded (on a bed, a mat, or the floor) with their left arms linked.
+  2. Players go one at a time. Using only your right hand, try to hit the other player with the rolled-up newspaper.
+- Ends: When you want to stop.
+
+**Feather**
+- Goal: Keep the feather from landing on the floor on your side.
+- How to play:
+  1. Everyone holds the edges of a blanket taut with a feather resting on top.
+  2. Blow the feather away from your side.
+  3. It's fine if it lands on your side of the blanket. You only lose if it comes over your side and lands on the floor.
+  4. The loser goes out and the rest keep playing.
+- Ends: When one player is left. They win.
+
+**Charades**
+- Goal: Get everyone else to guess what you're acting out.
+- How to play:
+  1. Pick someone to go first.
+  2. They act out a movie, book or phrase without speaking while everyone else guesses.
+  3. Take turns.
+- Ends: When people want to stop.
+
+**Hat Game**
+- Goal: Get the most names guessed across all four rounds.
+- How to play:
+  1. Everyone writes names on slips and puts them in a hat. The same slips are used for every round.
+  2. Split into teams. Teams take turns drawing a name and getting their teammates to guess it.
+  3. Round 1: describe it in words. Round 2: act it out. Round 3: say one word only. Round 4: act it out under a blanket.
+- Ends: After the fourth round. The team with the most names guessed across all rounds wins.
+
+Note: Charades player count changed from "4+ (teams)" to "2+".
