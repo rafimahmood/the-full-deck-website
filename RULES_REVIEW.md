@@ -98,6 +98,56 @@ Final approved rules text, category by category. Gameplay was not changed, only 
   3. After the third question, the guesser names the number.
 - Ends: The guesser wins if the number is right.
 
-## Dinner (pending)
+## Dinner (approved)
+
+**Toast**
+- Goal: Make the person on your left feel good.
+- How to play:
+  1. Pick someone to go first.
+  2. Going around the table, each person gives a short toast or speech about the person on their left.
+- Ends: When everyone has had a turn.
+
+**Psychiatrist**
+- Goal: The guesser works out the secret scenario.
+- How to play:
+  1. One player (the guesser) leaves the room.
+  2. The rest agree on a secret scenario, such as "everyone answers as if they're the person on their left".
+  3. The guesser comes back and asks as many questions as they like. Everyone answers according to the scenario.
+- Ends: When the guesser works out the scenario.
+- Example: Asked "What's your favourite food?", everyone answers as the person on their left would.
+
+**Dinner Derby**
+- Goal: Be the first to make it all the way round the table back to your own seat.
+- How to play:
+  1. Each player gets a card suit.
+  2. A host calls out suits. When your suit is called, you sit on the lap of the person to your left.
+  3. The host plays the William Tell Overture, which gets louder as the game goes on.
+- Ends: When someone gets back around to their own seat.
+
+**Oxford vs Cambridge**
+- Goal: Be the first team back to your starting seats.
+- How to play:
+  1. Split into two equal teams, Oxford and Cambridge, sitting in two lines facing each other and holding hands along the line.
+  2. A host deals the cards face-up one at a time. The two players nearest the cards (one from each team) and the two nearest the fruit (one from each team) keep their eyes open. Everyone else closes their eyes.
+  3. When a royal (jack, queen or king) appears, the players nearest the cards squeeze the hand next to them. The squeeze passes down the line to the players at the fruit.
+  4. The players nearest the fruit grab it as fast as they can. The team that grabs it shuffles down one seat, and the player at the end goes round to the front.
+  5. If someone grabs the fruit when there was no royal, the other team shuffles down one seat instead.
+- Ends: The first team back in its original seats wins.
+
+**Consequences**
+- Goal: Write a silly story together without seeing what the others wrote.
+- How to play:
+  1. Everyone gets a sheet of paper.
+  2. Write one line to match the prompt, then fold the paper to hide it and pass it to your left. The prompts go in this order: "Him...", "Her...", "He said...", "She said...", "They...", "The whole world...".
+  3. Keep passing left each time until every sheet has six lines. With fewer than six players, the sheets just keep going round.
+- Ends: Unfold the papers and read each story aloud.
+
+**Paranoia**
+- Goal: Find out who the question was about.
+- How to play:
+  1. Whisper a question starting with "Who in this room..." to the person on your left.
+  2. They answer out loud by naming someone in the room.
+  3. The person named can ask "What was the question?" To find out, they take a forfeit.
+- Ends: When people want to stop.
 
 ## Active (pending)
