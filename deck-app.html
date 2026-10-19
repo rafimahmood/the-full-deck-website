@@ -104,6 +104,11 @@
     z-index:30;
   }
 
+  /* Keep the logo clear of the fixed Home and theme buttons on narrow screens. */
+  @media (max-width:520px){
+    body{ padding-top:68px; }
+  }
+
   .icon-svg{
     width:16px;
     height:16px;
@@ -242,6 +247,7 @@
     line-height:1.55;
     color:var(--rules-text);
     overflow-y:auto;
+    overflow-x:hidden;
     cursor:default;
   }
 
@@ -488,7 +494,10 @@
   }
   .detail-nav .btn-ghost{ flex:1; }
 
-  .card{ touch-action:pan-y; }
+  /* Horizontal drags on the card are swipes, so only vertical panning is left to the browser.
+     touch-action isn't inherited, and the scrollable rules area has its own, so cover every
+     element inside the card (otherwise a swipe that starts on the rules text is cancelled). */
+  .card, .card *{ touch-action:pan-y; }
   .title-row{
     display:flex;
     align-items:flex-start;
@@ -712,7 +721,7 @@
 <footer>THE FULL DECK</footer>
 
 <script type="module">
-import { Deck, NO_FILTERS, findGameById, listSetup, parseShareHash, rulesHTML, shareHash, shareUrl, visibleGames } from './js/deck.js';
+import { Deck, NO_FILTERS, findGameById, listSetup, parseShareHash, rulesHTML, shareHash, shareUrl, swipeDirection, visibleGames } from './js/deck.js';
 import { GAMES } from './js/games.js';
 
 const $ = (id) => document.getElementById(id);
@@ -958,24 +967,25 @@ $('detailNext').addEventListener('click', () => detailStep(1));
 // A plain native click event handles simple taps — more reliable across browsers/previews
 // than inferring "tap" purely from pointer movement distance.
 function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
-  let startX = 0, startY = 0, dragging = false, captured = false, cardEl = null, suppressNextClick = false;
+  let startX = 0, startY = 0, lastX = 0, lastY = 0, dragging = false, captured = false, cardEl = null, suppressNextClick = false;
 
   container.addEventListener('pointerdown', (e) => {
     cardEl = container.querySelector('.card');
     if(!cardEl) return;
-    startX = e.clientX; startY = e.clientY; dragging = true; captured = false;
+    startX = lastX = e.clientX; startY = lastY = e.clientY; dragging = true; captured = false;
     cardEl.style.transition = 'none';
   });
 
   container.addEventListener('pointermove', (e) => {
     if(!dragging || !cardEl) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
+    lastX = e.clientX; lastY = e.clientY;
+    const dx = lastX - startX;
+    const dy = lastY - startY;
     if(!captured && Math.abs(dx) + Math.abs(dy) > 10){
       // keep receiving events if the pointer leaves the card mid-drag (captured only once it is a drag, so plain taps still click normally)
       try{ container.setPointerCapture(e.pointerId); captured = true; }catch(err){}
     }
-    if(Math.abs(dx) > Math.abs(dy)){
+    if(swipeDirection(dx, dy, 0)){ // sideways drag: the card follows the finger
       cardEl.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`;
     }
   });
@@ -991,17 +1001,15 @@ function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
     const el = cardEl;
     cardEl = null;
 
-    if(e.type === 'pointercancel'){ // the browser took over (e.g. a vertical scroll) — not a swipe
-      snapBack(el);
-      suppressNextClick = true;
-      return;
-    }
-
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
+    // A cancel means the browser took the gesture over (usually a vertical scroll of long rules).
+    // pointercancel carries no usable position, so use the last move. If it was clearly sideways
+    // anyway, still count it as a swipe; otherwise it was a scroll and the card snaps back.
+    const cancelled = e.type === 'pointercancel';
+    const dx = (cancelled ? lastX : e.clientX) - startX;
+    const dy = (cancelled ? lastY : e.clientY) - startY;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    if(dist < 10){
+    if(!cancelled && dist < 10){
       // negligible movement — let the native click event handle it as a tap
       el.style.transition = '';
       el.style.transform = '';
@@ -1010,11 +1018,12 @@ function attachSwipeCard(container, { onSwipeLeft, onSwipeRight, onTap }){
 
     suppressNextClick = true; // a real drag happened — don't also fire onTap from the click that follows
 
-    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){
+    const dir = swipeDirection(dx, dy);
+    if(dir){
       el.style.transition = 'transform .25s ease, opacity .25s ease';
-      el.style.transform = `translateX(${dx < 0 ? -420 : 420}px) rotate(${dx < 0 ? -20 : 20}deg)`;
+      el.style.transform = `translateX(${dir === 'left' ? -420 : 420}px) rotate(${dir === 'left' ? -20 : 20}deg)`;
       el.style.opacity = '0';
-      setTimeout(() => { if(dx < 0) onSwipeLeft(); else onSwipeRight(); }, 180);
+      setTimeout(() => { if(dir === 'left') onSwipeLeft(); else onSwipeRight(); }, 180);
     } else {
       snapBack(el);
     }

@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   Deck, type Game, NO_FILTERS, canPlay, filterGames, findGameById, listSetup, needsNoEquipment,
-  parsePlayers, parseShareHash, rulesHTML, shareHash, shareUrl, sortGames, visibleGames,
+  parsePlayers, parseShareHash, rulesHTML, shareHash, shareUrl, sortGames, swipeDirection, visibleGames,
 } from '../src/deck';
+import { readFileSync } from 'node:fs';
 import { GAMES } from '../src/games';
 
 const game = (over: Partial<Game> = {}): Game => ({
@@ -259,5 +260,47 @@ describe('game data', () => {
     expect(GAMES.filter((g) => g.spoiler).map((g) => g.id).sort()).toEqual(
       ['likes', 'note-noti', 'picnic', 'psychiatrist', 'the-moon-is-in-the-spoon'],
     );
+  });
+});
+
+describe('swipeDirection', () => {
+  it('reads a clear sideways drag as a swipe', () => {
+    expect(swipeDirection(-120, 5)).toBe('left');
+    expect(swipeDirection(120, -5)).toBe('right');
+    expect(swipeDirection(-80, 40)).toBe('left'); // a little diagonal is fine
+  });
+  it('ignores short drags', () => {
+    expect(swipeDirection(-59, 0)).toBeNull();
+    expect(swipeDirection(30, 8)).toBeNull();
+    expect(swipeDirection(0, 0)).toBeNull();
+  });
+  it('ignores vertical and mostly-vertical drags, so scrolling the rules never flips the card', () => {
+    expect(swipeDirection(5, -200)).toBeNull();
+    expect(swipeDirection(-90, 140)).toBeNull();
+    expect(swipeDirection(-100, 90)).toBeNull(); // near 45 degrees
+  });
+  it('lets the caller change the thresholds', () => {
+    expect(swipeDirection(-30, 0, 20)).toBe('left');
+    expect(swipeDirection(-100, 80, 60, 1)).toBe('left');
+  });
+});
+
+describe('deck-app.html touch handling', () => {
+  // Regression: on iPhone Safari a swipe that started over the scrollable rules text was taken
+  // over by the browser (pointercancel), because touch-action isn't inherited and the rules area
+  // has its own. Every element in the card must allow only vertical panning.
+  const html = readFileSync(new URL('../deck-app.html', import.meta.url), 'utf8');
+  const css = html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
+
+  it('sets touch-action: pan-y on the card and everything inside it', () => {
+    expect(css).toMatch(/\.card,\s*\.card \*\s*\{[^}]*touch-action:\s*pan-y/);
+  });
+  it('stops the rules area scrolling sideways', () => {
+    const rules = /\n\s*\.rules\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    expect(rules).toMatch(/overflow-y:\s*auto/);
+    expect(rules).toMatch(/overflow-x:\s*hidden/);
+  });
+  it('does not turn off touch-action anywhere inside the card', () => {
+    expect(css).not.toMatch(/touch-action:\s*(auto|manipulation|none)/);
   });
 });

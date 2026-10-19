@@ -119,3 +119,13 @@ export function rulesHTML(r) {
         `<p class="r-line"><span class="r-label">Ends</span>${escapeHTML(r.ends)}</p>` +
         (r.example ? `<p class="r-line"><span class="r-label">Example</span>${escapeHTML(r.example)}</p>` : ''));
 }
+/**
+ * Decides whether a drag of (dx, dy) pixels is a horizontal swipe. It must travel at least
+ * `minDistance` sideways and be clearly more sideways than vertical, so vertical scrolling
+ * and small or diagonal drags are ignored.
+ */
+export function swipeDirection(dx, dy, minDistance = 60, ratio = 1.5) {
+    if (Math.abs(dx) < minDistance || Math.abs(dx) < Math.abs(dy) * ratio)
+        return null;
+    return dx < 0 ? 'left' : 'right';
+}
