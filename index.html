@@ -4,9 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Full Deck — A party deck for every table</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta name="description" content="The Full Deck is a deck of party games for any table: word games, dinner games and active games. Free to play online now. Draw a random game, filter by how many of you are playing, and share a link to any game.">
+<meta name="theme-color" content="#F6F1E7">
+<link rel="canonical" href="https://thefulldeck.netlify.app/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Full Deck">
+<meta property="og:title" content="The Full Deck: One deck. Three ways to play.">
+<meta property="og:description" content="27 party games sorted into Word, Dinner and Active. Free to play online now. The physical card deck is coming soon.">
+<meta property="og:url" content="https://thefulldeck.netlify.app/">
+<meta property="og:image" content="https://thefulldeck.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Full Deck. One deck. Three ways to play. Fanned party game cards.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Full Deck: One deck. Three ways to play.">
+<meta name="twitter:description" content="27 party games sorted into Word, Dinner and Active. Free to play online now.">
+<meta name="twitter:image" content="https://thefulldeck.netlify.app/og-image.png">
+<meta name="twitter:image:alt" content="The Full Deck. One deck. Three ways to play. Fanned party game cards.">
+<link rel="preload" href="fonts/alfa-slab-one.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/karla.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  @font-face{font-family:'Alfa Slab One';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/alfa-slab-one.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+  @font-face{font-family:'Karla';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/karla.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+  @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/space-mono-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+  @font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-mono-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
   :root{
     --cream:#F6F1E7;
     --paper:#EFE7D6;
@@ -69,7 +93,7 @@
     font-size:12px;
     letter-spacing:0.14em;
     text-transform:uppercase;
-    opacity:0.6;
+    opacity:0.75;
     margin-bottom:16px;
   }
   h1{
@@ -109,20 +133,62 @@
   .fan-card{
     position:absolute; top:20px; left:50%;
     width:210px; height:294px;
+  }
+  /* tilt (hover / tap) wraps the flip, which wraps the two faces */
+  .fc-tilt{
+    position:absolute; inset:0;
+    transform-style:preserve-3d;
+    transform: perspective(800px) translateY(var(--lift, 0px)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .18s ease-out;
+  }
+  .fc-inner{
+    position:absolute; inset:0;
+    transform-style:preserve-3d;
+    transition: transform .6s cubic-bezier(.3,.7,.2,1);
+  }
+  .fan-card.flipped .fc-inner{ transform: rotateY(180deg); }
+  .fc-face{
+    position:absolute; inset:0;
     border-radius:14px;
+    background:var(--cream);
     box-shadow: 0 20px 40px -14px rgba(43,33,24,0.4);
     border:1.5px solid rgba(43,33,24,0.15);
     display:flex; flex-direction:column;
+    overflow:hidden;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
   }
-  .fan-card .band{ height:46px; }
-  .fan-card .fbody{ flex:1; padding:16px; }
+  .fc-face.back{ transform: rotateY(180deg); }
+  .fan-card .band{ height:46px; flex:none; }
+  .fan-card .fbody{ flex:1; padding:16px; display:flex; flex-direction:column; }
   .fan-card .ftitle{ font-family:'Alfa Slab One', serif; font-size:18px; margin-bottom:8px; }
   .fan-card .frules{ font-size:11px; line-height:1.5; color:#4a3d2f; }
-  .fan-card.c1{ background:var(--active); transform: translate(-50%, 0) rotate(-11deg); z-index:1; }
-  .fan-card.c2{ background:var(--cream); transform: translate(-70%, 14px) rotate(-2deg); z-index:2; }
+  .fan-card .fcat{ font-family:'Space Mono', monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:#5c4d3a; margin-bottom:6px; }
+  .fan-card.c3 .back .frules{ font-size:12.5px; }
+  .fan-card .fplay{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .fan-card .fplay:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:2px; }
+  .band.word{ background:var(--word); }
+  .band.dinner{ background:var(--dinner); }
+  .band.active{ background:var(--active); }
+  .fan-card.c1{ transform: translate(-50%, 0) rotate(-11deg); z-index:1; }
+  .fan-card.c1 .fc-face{ background:var(--active); }
+  .fan-card.c2{ transform: translate(-70%, 14px) rotate(-2deg); z-index:2; }
   .fan-card.c2 .band{ background:var(--dinner); }
-  .fan-card.c3{ background:var(--cream); transform: translate(-32%, 26px) rotate(9deg); z-index:3; }
-  .fan-card.c3 .band{ background:var(--word); }
+  .fan-card.c3{ transform: translate(-32%, 26px) rotate(9deg); z-index:3; }
+  .fan-card.c3 .front .band{ background:var(--word); }
+  @media (prefers-reduced-motion: reduce){
+    .fc-tilt, .fc-inner{ transition:none; }
+  }
 
   /* SECTION: what's inside */
   section{ padding:64px 0; }
@@ -170,12 +236,30 @@
     font-size:10.5px;
     letter-spacing:0.06em;
     text-transform:uppercase;
-    opacity:0.6;
+    opacity:0.78;
   }
   .cat-card.word{ border-color:var(--word); }
   .cat-card.dinner{ border-color:var(--dinner); }
   .cat-card.active{ border-color:var(--active); }
   .cat-card.cardgame{ border-color:var(--cardgame); }
+  .cat-card.soon{
+    background:transparent;
+    border:1.5px dashed rgba(43,33,24,0.35);
+    border-left:6px solid var(--cardgame);
+    cursor:default;
+  }
+  .cat-card.soon:hover{ transform:none; box-shadow:none; }
+  .cat-card .soon-badge{
+    display:inline-block;
+    font-family:'Space Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:100px;
+    border:1.5px solid var(--cardgame);
+    color:var(--cardgame);
+  }
 
   /* HOW IT WORKS */
   .how{ background:var(--paper); }
@@ -195,7 +279,7 @@
     font-weight:700;
     color:var(--active);
   }
-  .step h4{ font-family:'Alfa Slab One', serif; font-size:16px; font-weight:400; margin-bottom:6px; }
+  .step h3{ font-family:'Alfa Slab One', serif; font-size:16px; font-weight:400; margin-bottom:6px; }
   .step p{ font-size:13.5px; line-height:1.55; color:#4a3d2f; }
 
   /* SIGNUP */
@@ -255,6 +339,9 @@
     h1{ font-size:38px; }
     .stack{ height:300px; margin-top:20px; }
     .fan-card{ width:170px; height:238px; }
+    .fan-card .band{ height:38px; }
+    .fan-card .fbody{ padding:12px; }
+    .fan-card.c3 .back .frules{ font-size:11.5px; }
   }
 </style>
 </head>
@@ -271,6 +358,7 @@
   </nav>
 </header>
 
+<main>
 <section class="hero">
   <div class="wrap">
     <div>
@@ -279,32 +367,45 @@
       <p class="lead">The Full Deck is a deck of party games sorted by category: Word Games, Dinner Games and Active, with Card Games coming soon. Shuffle the whole thing, or pull a category to match your table's mood. It's free to play online right now, and the physical card deck is coming soon.</p>
       <div class="cta-row">
         <a href="deck-app.html" class="btn btn-primary">Play the deck</a>
+        <button type="button" class="btn btn-ghost" id="draw-random" aria-controls="flip-card">Draw a random game</button>
         <a href="#signup" class="btn btn-ghost">Physical deck updates</a>
       </div>
     </div>
-    <div class="stack">
-      <div class="fan-card c1">
-        <div class="band"></div>
-        <div class="fbody">
-          <div class="ftitle">Around the World</div>
-          <div class="frules">Name a country. Next player names one starting with your last letter. No repeats.</div>
-        </div>
+    <div class="stack" id="stack" role="group" aria-label="Fanned example cards">
+      <div class="fan-card c1" aria-hidden="true">
+        <div class="fc-tilt"><div class="fc-face"></div></div>
       </div>
-      <div class="fan-card c2">
-        <div class="band"></div>
-        <div class="fbody">
-          <div class="ftitle">Dinner Derby</div>
-          <div class="frules">Everyone gets a card suit. When the host calls yours, sit on the lap of the person to your left. First back to their own seat wins.</div>
-        </div>
+      <div class="fan-card c2" aria-hidden="true">
+        <div class="fc-tilt"><div class="fc-face">
+          <div class="band"></div>
+          <div class="fbody">
+            <div class="ftitle">Dinner Derby</div>
+            <div class="frules">Everyone gets a card suit. When the host calls yours, sit on the lap of the person to your left. First back to their own seat wins.</div>
+          </div>
+        </div></div>
       </div>
-      <div class="fan-card c3">
-        <div class="band"></div>
-        <div class="fbody">
-          <div class="ftitle">Categories</div>
-          <div class="frules">Call out a category — types of cheese, say. Everyone names something that fits until someone stumbles.</div>
-        </div>
+      <div class="fan-card c3" id="flip-card">
+        <div class="fc-tilt"><div class="fc-inner">
+          <div class="fc-face front" aria-hidden="true">
+            <div class="band"></div>
+            <div class="fbody">
+              <div class="ftitle">Categories</div>
+              <div class="frules">Call out a category — types of cheese, say. Everyone names something that fits until someone stumbles.</div>
+            </div>
+          </div>
+          <div class="fc-face back" id="flip-back" inert aria-hidden="true">
+            <div class="band" id="back-band"></div>
+            <div class="fbody">
+              <div class="fcat" id="back-cat"></div>
+              <div class="ftitle" id="back-title"></div>
+              <div class="frules" id="back-goal"></div>
+              <a class="fplay" id="back-link" href="deck-app.html">Play this &rarr;</a>
+            </div>
+          </div>
+        </div></div>
       </div>
     </div>
+    <p class="sr-only" id="draw-status" aria-live="polite"></p>
   </div>
 </section>
 
@@ -331,11 +432,11 @@
         <p>Up-and-moving games for when the room has energy to burn.</p>
         <span class="cat-cta">Play Active →</span>
       </a>
-      <a class="cat-card cardgame" href="deck-app.html">
+      <div class="cat-card cardgame soon">
         <h3>Card Games</h3>
         <p>Classic card game rules, reformatted so no one has to Google them mid-party.</p>
-        <span class="cat-cta">Coming soon →</span>
-      </a>
+        <span class="soon-badge">Coming soon</span>
+      </div>
     </div>
   </div>
 </section>
@@ -348,15 +449,15 @@
     </div>
     <div class="steps">
       <div class="step">
-        <h4>Shuffle</h4>
+        <h3>Shuffle</h3>
         <p>Mix the whole deck, or split by category if your table wants a specific kind of night.</p>
       </div>
       <div class="step">
-        <h4>Draw a card</h4>
+        <h3>Draw a card</h3>
         <p>Everything you need — players, setup, rules — fits in a glance.</p>
       </div>
       <div class="step">
-        <h4>Play</h4>
+        <h3>Play</h3>
         <p>No rulebook to dig for mid-game — the card has everything, so you can just play and enjoy.</p>
       </div>
     </div>
@@ -378,6 +479,8 @@
     <div class="form-note">NO SPAM · UNSUBSCRIBE ANYTIME · <a href="privacy.html" style="color:inherit; text-decoration:underline;">Terms &amp; Privacy</a></div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">
@@ -448,6 +551,73 @@
   });
   input.addEventListener('input', function(){ if(status.classList.contains('error')) say('', false); });
 })();
+</script>
+
+<script type="module">
+// Fan cards: a subtle tilt on hover or tap, and a random real game on the front card.
+const stack = document.getElementById('stack');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+stack.querySelectorAll('.fc-tilt').forEach((tilt) => {
+  const reset = () => { tilt.style.setProperty('--rx', '0deg'); tilt.style.setProperty('--ry', '0deg'); tilt.style.setProperty('--lift', '0px'); };
+  const lean = (e) => {
+    if (reduceMotion.matches) return;
+    const r = tilt.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    tilt.style.setProperty('--ry', `${(x * 12).toFixed(1)}deg`);
+    tilt.style.setProperty('--rx', `${(-y * 12).toFixed(1)}deg`);
+    tilt.style.setProperty('--lift', '-6px');
+  };
+  tilt.addEventListener('pointermove', lean);
+  tilt.addEventListener('pointerdown', lean);
+  tilt.addEventListener('pointerleave', reset);
+  tilt.addEventListener('pointercancel', reset);
+  tilt.addEventListener('pointerup', (e) => { if (e.pointerType === 'mouse') return; setTimeout(reset, 220); });
+});
+
+const btn = document.getElementById('draw-random');
+const card = document.getElementById('flip-card');
+const back = document.getElementById('flip-back');
+const status = document.getElementById('draw-status');
+const CATS = { word: 'Word Games', dinner: 'Dinner Games', active: 'Active' };
+let deckPromise = null;
+
+// Same game data and no-repeat draw as the app. Loaded on first use so the page stays light.
+const loadDeck = () => (deckPromise ??= Promise.all([import('./js/games.js'), import('./js/deck.js')])
+  .then(([{ GAMES }, { Deck }]) => new Deck(GAMES)));
+btn.addEventListener('pointerenter', loadDeck, { once: true });
+btn.addEventListener('focus', loadDeck, { once: true });
+
+function show(game) {
+  document.getElementById('back-band').className = `band ${game.cat}`;
+  document.getElementById('back-cat').textContent = CATS[game.cat];
+  document.getElementById('back-title').textContent = game.title;
+  document.getElementById('back-goal').textContent = game.rules.goal;
+  document.getElementById('back-link').href = `deck-app.html#g=${game.id}`;
+  back.inert = false;
+  back.removeAttribute('aria-hidden');
+  card.classList.add('flipped');
+  btn.textContent = 'Draw another game';
+  status.textContent = `${game.title}. Goal: ${game.rules.goal}`;
+}
+
+btn.addEventListener('click', async () => {
+  let game;
+  try { game = (await loadDeck()).draw(); }
+  catch { deckPromise = null; status.textContent = "Couldn't load the games. Try again."; return; }
+  if (!game) return;
+  if (window.matchMedia('(max-width: 780px)').matches) { // on phones the cards sit below the buttons, so bring them into view
+    stack.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'center' });
+  }
+  if (card.classList.contains('flipped') && !reduceMotion.matches) {
+    card.classList.remove('flipped'); // flip back, then show the next one
+    back.inert = true;
+    setTimeout(() => show(game), 380);
+  } else {
+    show(game);
+  }
+});
 </script>
 
 </body>

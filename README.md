@@ -19,6 +19,12 @@ The pages are plain static HTML and CSS. The deck's game data and logic are Type
 - `js/`: compiled output that `deck-app.html` loads. After changing anything in `src/`, run `npm run build` and commit `js/`. CI fails if `js/` is out of date.
 - `npm run serve` serves the site on http://localhost:8080. Open the app that way, not by double-clicking the file, because browsers block ES modules on `file://`.
 
+## Fonts, icons and previews
+
+- Fonts (Alfa Slab One, Karla, Space Mono; Latin subset) are self-hosted in `fonts/` and declared inline in each page, so nothing blocks rendering on a third-party stylesheet.
+- `favicon.svg`, `favicon-32.png`, `favicon-192.png` and `apple-touch-icon.png` are linked from every page.
+- `og-image.png` (1200x630) is the Open Graph / Twitter card image for `index.html` and `deck-app.html`. Browsers don't send the `#...` part of a URL, so a shared game link (`deck-app.html#g=charades`) previews as the deck page, not as that one game.
+
 ## Sign-up flow
 
 The "Notify me" form on `index.html` adds people to a Mailchimp audience.
