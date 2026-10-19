@@ -16,6 +16,11 @@
   @font-face{font-family:'Karla';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/karla.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
   @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/space-mono-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
   @font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-mono-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+  @font-face{font-family:'Alfa Slab Fallback';src:local('Georgia Bold'),local('Georgia-Bold');font-weight:400;size-adjust:104.09%;ascent-override:99.92%;descent-override:31.7%;line-gap-override:0%}
+  @font-face{font-family:'Karla Fallback';src:local('Arial');font-weight:400;size-adjust:101.55%;ascent-override:90.59%;descent-override:24.62%;line-gap-override:0%}
+  @font-face{font-family:'Karla Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:700;size-adjust:98.82%;ascent-override:93.1%;descent-override:25.3%;line-gap-override:0%}
+  @font-face{font-family:'Space Mono Fallback';src:local('Courier New');font-weight:400;size-adjust:101.98%;ascent-override:109.82%;descent-override:35.3%;line-gap-override:0%}
+  @font-face{font-family:'Space Mono Fallback';src:local('Courier New Bold'),local('CourierNewPS-BoldMT');font-weight:700;size-adjust:101.98%;ascent-override:109.82%;descent-override:35.3%;line-gap-override:0%}
   :root{
     --cream:#F6F1E7;
     --paper:#EFE7D6;
@@ -27,7 +32,7 @@
   body{
     background:var(--cream);
     color:var(--ink);
-    font-family:'Karla', sans-serif;
+    font-family:'Karla', 'Karla Fallback', sans-serif;
     background-image: radial-gradient(circle at 1px 1px, rgba(43,33,24,0.05) 1px, transparent 0);
     background-size: 22px 22px;
   }
@@ -39,7 +44,7 @@
     display:inline-flex;
     align-items:center;
     gap:6px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:12px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -50,14 +55,14 @@
   }
 
   .logo{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-size:20px;
     margin-bottom:8px;
   }
   .logo span{ color:var(--brand); }
 
   .updated{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.06em;
     text-transform:uppercase;
@@ -66,7 +71,7 @@
   }
 
   h1{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-weight:400;
     font-size:34px;
     line-height:1.1;
@@ -74,7 +79,7 @@
   }
 
   h2{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-weight:400;
     font-size:19px;
     margin:36px 0 12px;
@@ -103,7 +108,7 @@
     margin-top:56px;
     padding-top:24px;
     border-top:1px solid rgba(43,33,24,0.12);
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     opacity:0.75;
   }

@@ -32,6 +32,11 @@
   @font-face{font-family:'Karla';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/karla.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
   @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/space-mono-400.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
   @font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/space-mono-700.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+  @font-face{font-family:'Alfa Slab Fallback';src:local('Georgia Bold'),local('Georgia-Bold');font-weight:400;size-adjust:104.09%;ascent-override:99.92%;descent-override:31.7%;line-gap-override:0%}
+  @font-face{font-family:'Karla Fallback';src:local('Arial');font-weight:400;size-adjust:101.55%;ascent-override:90.59%;descent-override:24.62%;line-gap-override:0%}
+  @font-face{font-family:'Karla Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:700;size-adjust:98.82%;ascent-override:93.1%;descent-override:25.3%;line-gap-override:0%}
+  @font-face{font-family:'Space Mono Fallback';src:local('Courier New');font-weight:400;size-adjust:101.98%;ascent-override:109.82%;descent-override:35.3%;line-gap-override:0%}
+  @font-face{font-family:'Space Mono Fallback';src:local('Courier New Bold'),local('CourierNewPS-BoldMT');font-weight:700;size-adjust:101.98%;ascent-override:109.82%;descent-override:35.3%;line-gap-override:0%}
   :root{
     --cream:#F6F1E7;
     --paper:#EFE7D6;
@@ -73,7 +78,7 @@
   body{
     background:var(--cream);
     color:var(--ink);
-    font-family:'Karla', sans-serif;
+    font-family:'Karla', 'Karla Fallback', sans-serif;
     background-image: radial-gradient(circle at 1px 1px, var(--bg-dot) 1px, transparent 0);
     background-size: 22px 22px;
     display:flex;
@@ -122,7 +127,7 @@
     align-items:center;
     gap:6px;
     text-decoration:none;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:12px;
     letter-spacing:0.03em;
     text-transform:uppercase;
@@ -149,12 +154,12 @@
     margin-bottom:var(--sp-4);
   }
   .logo{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-size:26px;
   }
   .logo span{ color:var(--brand); }
   .tagline{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.1em;
     text-transform:uppercase;
@@ -175,7 +180,7 @@
     display:inline-flex;
     align-items:center;
     gap:6px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11.5px;
     letter-spacing:0.03em;
     text-transform:uppercase;
@@ -233,7 +238,7 @@
     color:var(--band-text);
   }
   .band .cat-label{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.1em;
     text-transform:uppercase;
@@ -246,7 +251,7 @@
     flex-direction:column;
   }
   .title{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-weight:400;
     font-size:24px;
     letter-spacing:-0.01em;
@@ -257,7 +262,7 @@
     display:flex;
     gap:12px;
     flex-wrap:wrap;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -278,7 +283,7 @@
 
   .rules .r-line{ margin:0 0 var(--sp-2); }
   .rules .r-label{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -306,7 +311,7 @@
     line-height:1.4;
   }
   .reveal-prompt .reveal-cta{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.06em;
     text-transform:uppercase;
@@ -338,7 +343,7 @@
   }
   .locked-panel .icon-svg{ width:22px; height:22px; color:var(--premium); }
   .locked-panel .locked-title{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-weight:400;
     font-size:14px;
     color:var(--premium);
@@ -355,7 +360,7 @@
     flex:1;
     text-align:center;
     padding:30px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:13px;
     color:var(--muted);
     cursor:pointer;
@@ -369,7 +374,7 @@
   }
   .btn{
     flex:1;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:13px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -385,7 +390,7 @@
 
   .deck-count{
     margin-top:14px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.06em;
     text-transform:uppercase;
@@ -405,7 +410,7 @@
     display:flex;
     align-items:center;
     gap:6px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:12px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -451,19 +456,19 @@
     gap:10px;
   }
   .list-row .lr-title{
-    font-family:'Alfa Slab One', serif;
+    font-family:'Alfa Slab One', 'Alfa Slab Fallback', serif;
     font-weight:400;
     font-size:15px;
     letter-spacing:-0.01em;
   }
   .list-row .lr-chevron{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:13px;
     opacity:0.4;
     flex:0 0 auto;
   }
   .list-row .lr-meta{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:9.5px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -472,7 +477,7 @@
   }
   .list-empty{
     text-align:center;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:12px;
     color:var(--muted);
     padding:30px 10px;
@@ -497,7 +502,7 @@
     background:transparent;
     border:none;
     cursor:pointer;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:13px;
     letter-spacing:0.03em;
     text-transform:uppercase;
@@ -505,7 +510,7 @@
     padding:4px;
   }
   .detail-counter{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.04em;
     color:var(--muted-strong);
@@ -536,7 +541,7 @@
     display:inline-flex;
     align-items:center;
     gap:5px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.04em;
     text-transform:uppercase;
@@ -563,14 +568,14 @@
     display:flex;
     align-items:center;
     gap:8px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11px;
     letter-spacing:0.03em;
     text-transform:uppercase;
     color:var(--muted-strong);
   }
   .fb-field select{
-    font-family:'Karla', sans-serif;
+    font-family:'Karla', 'Karla Fallback', sans-serif;
     font-size:16px;
     padding:8px 12px;
     border-radius:100px;
@@ -579,7 +584,7 @@
     color:var(--ink);
   }
   .toggle-chip{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:11.5px;
     letter-spacing:0.03em;
     text-transform:uppercase;
@@ -593,7 +598,7 @@
   }
   .toggle-chip[aria-pressed="true"]{ opacity:1; background:var(--ink); color:var(--cream); border-color:transparent; }
   .result-count{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.06em;
     text-transform:uppercase;
@@ -623,7 +628,7 @@
     padding:0 4px var(--sp-1);
   }
   .fs-hint{
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10.5px;
     letter-spacing:0.05em;
     text-transform:uppercase;
@@ -646,7 +651,7 @@
     border-radius:100px;
     background:var(--ink);
     color:var(--cream);
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:12px;
     letter-spacing:0.03em;
     opacity:0;
@@ -659,7 +664,7 @@
 
   footer{
     margin-top:30px;
-    font-family:'Space Mono', monospace;
+    font-family:'Space Mono', 'Space Mono Fallback', monospace;
     font-size:10px;
     opacity:0.75;
     text-align:center;
