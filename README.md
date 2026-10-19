@@ -60,7 +60,7 @@ npm run typecheck
 
 ### Tests and CI
 
-`tests/deck.test.ts` covers player-count parsing, the player and equipment filters, the random draw never repeating until the deck is used up, share links and a data check on every game. `tests/subscribe.test.ts` covers email validation, the Mailchimp request, the "already subscribed" case, the honeypot, origin and method checks, missing configuration, and every Mailchimp error mapping, with a mocked `fetch`. GitHub Actions (`.github/workflows/ci.yml`) runs a secret scan, the typecheck and the tests on every push.
+`tests/deck.test.ts` covers player-count parsing, the player and equipment filters, the random draw never repeating until the deck is used up, share links and a data check on every game. `tests/subscribe.test.ts` covers email validation, the Mailchimp request, the "already subscribed" case, the honeypot, origin and method checks, missing configuration, and every Mailchimp error mapping, with a mocked `fetch`. `e2e/swipe.mjs` is a Playwright check of swiping on the phone full-screen card (iPhone 14: normal, long and secret cards, plus scrolling and small or diagonal drags). It needs browsers, so CI doesn't run it. Run `npx playwright install webkit chromium` once, then `npm run test:e2e` (WebKit) or `npm run test:e2e -- chromium` (real touch input). GitHub Actions (`.github/workflows/ci.yml`) runs a secret scan, the typecheck and the tests on every push.
 
 ## Hosting
 
