@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>The Full Deck</title>
+  <rect width="64" height="64" rx="14" fill="#B5482A"/>
+  <g transform="rotate(-13 24 32)">
+    <rect x="9" y="10" width="28" height="40" rx="4.5" fill="#F6F1E7"/>
+    <path d="M9 14.5a4.5 4.5 0 0 1 4.5-4.5h19a4.5 4.5 0 0 1 4.5 4.5V21H9z" fill="#B5791E"/>
+  </g>
+  <g transform="rotate(10 40 34)">
+    <rect x="26" y="13" width="28" height="40" rx="4.5" fill="#F6F1E7" stroke="#2B2118" stroke-opacity=".18" stroke-width="1.5"/>
+    <path d="M26 17.5a4.5 4.5 0 0 1 4.5-4.5h19a4.5 4.5 0 0 1 4.5 4.5V24H26z" fill="#1D4E5F"/>
+    <rect x="31" y="31" width="18" height="3" rx="1.5" fill="#2B2118" fill-opacity=".55"/>
+    <rect x="31" y="38" width="12" height="3" rx="1.5" fill="#2B2118" fill-opacity=".3"/>
+  </g>
+</svg>
