@@ -7,10 +7,17 @@ The website for **The Full Deck**, a party card game: a deck of party games for 
 ## Pages
 
 - `index.html`: landing page introducing the deck, with the Mailchimp sign-up form
-- `deck-app.html`: the deck itself, where you browse the cards and their rules
+- `deck-app.html`: the deck itself, where you browse the cards and their rules, filter by player count and equipment, randomize, and share a link to any game (`deck-app.html#g=charades`)
 - `privacy.html`: terms and privacy
 
-The pages are plain static HTML, CSS and a little JavaScript with no build step. The one dynamic piece is the sign-up form, which talks to a small Netlify Function (see below).
+The pages are plain static HTML and CSS. The deck's game data and logic are TypeScript in `src/`, compiled to `js/` and committed, so Netlify needs no build step. The one dynamic piece is the sign-up form, which talks to a small Netlify Function (see below).
+
+## The deck app
+
+- `src/games.ts`: all 27 games (rules text approved game by game, see `RULES_REVIEW.md`)
+- `src/deck.ts`: player-count parsing (`Any`, `2`, `4+`, `6+ (even)`), filters, the no-repeat random draw, share links
+- `js/`: compiled output that `deck-app.html` loads. After changing anything in `src/`, run `npm run build` and commit `js/`. CI fails if `js/` is out of date.
+- `npm run serve` serves the site on http://localhost:8080. Open the app that way, not by double-clicking the file, because browsers block ES modules on `file://`.
 
 ## Sign-up flow
 
@@ -53,7 +60,7 @@ npm run typecheck
 
 ### Tests and CI
 
-`tests/subscribe.test.ts` covers email validation, the Mailchimp request, the "already subscribed" case, the honeypot, origin and method checks, missing configuration, and every Mailchimp error mapping, with a mocked `fetch`. GitHub Actions (`.github/workflows/ci.yml`) runs a secret scan, the typecheck and the tests on every push.
+`tests/deck.test.ts` covers player-count parsing, the player and equipment filters, the random draw never repeating until the deck is used up, share links and a data check on every game. `tests/subscribe.test.ts` covers email validation, the Mailchimp request, the "already subscribed" case, the honeypot, origin and method checks, missing configuration, and every Mailchimp error mapping, with a mocked `fetch`. GitHub Actions (`.github/workflows/ci.yml`) runs a secret scan, the typecheck and the tests on every push.
 
 ## Hosting
 
