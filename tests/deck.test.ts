@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  Deck, type Game, NO_FILTERS, canPlay, filterGames, findGameById, listSetup, needsNoEquipment,
+  Deck, type Game, NO_EQUIPMENT_LABEL, NO_FILTERS, canPlay, equipmentLabel, filterGames, findGameById, listSetup, needsNoEquipment,
   parsePlayers, parseShareHash, rulesHTML, shareHash, shareUrl, sortGames, swipeDirection, visibleGames,
 } from '../src/deck';
 import { readFileSync } from 'node:fs';
@@ -57,6 +57,29 @@ describe('equipment', () => {
   it('uses the short text in lists when there is one', () => {
     expect(listSetup(game({ setup: 'A very long list of things', setupShort: 'Things' }))).toBe('Things');
     expect(listSetup(game({ setup: 'A spoon' }))).toBe('A spoon');
+  });
+  it('says "No equipment needed" instead of "None", on the card and in the list', () => {
+    expect(NO_EQUIPMENT_LABEL).toBe('No equipment needed');
+    expect(equipmentLabel(game({ setup: 'None' }))).toBe('No equipment needed');
+    expect(equipmentLabel(game({ setup: ' none ' }))).toBe('No equipment needed');
+    expect(listSetup(game({ setup: 'None' }))).toBe('No equipment needed');
+  });
+  it('shows the full equipment text on the card, even when the list uses a short one', () => {
+    const g = game({ setup: 'Playing cards (one suit per person), music', setupShort: 'Cards, music' });
+    expect(equipmentLabel(g)).toBe('Playing cards (one suit per person), music');
+    expect(listSetup(g)).toBe('Cards, music');
+  });
+  it('never shows a bare "None" for any real game', () => {
+    for (const g of GAMES) {
+      expect(equipmentLabel(g), g.title).not.toMatch(/^none$/i);
+      expect(listSetup(g), g.title).not.toMatch(/^none$/i);
+      expect(needsNoEquipment(g) ? equipmentLabel(g) : '', g.title).toBe(needsNoEquipment(g) ? 'No equipment needed' : '');
+    }
+  });
+  it('the app page uses the label for the card, not the raw setup text', () => {
+    const html = readFileSync(new URL('../deck-app.html', import.meta.url), 'utf8');
+    expect(html).toContain('equipmentLabel(game)');
+    expect(html).not.toContain('<b>Setup</b> ${game.setup}');
   });
 });
 

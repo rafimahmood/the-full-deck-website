@@ -9,33 +9,20 @@
 // scroll-container rules, which is where the iPhone bug was. Playwright's WebKit has no
 // touch-drag API, so there the swipe is a sequence of touch pointer events fired in the page,
 // and the test also checks the computed touch-action/overflow that stop Safari taking the gesture.
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { chromium, devices, webkit } from 'playwright';
+import { devices } from 'playwright';
+import { engineFromArgs, launch, reporter, startServer } from './lib.mjs';
 
-const engine = process.argv[2] === 'chromium' ? 'chromium' : 'webkit';
-const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
-
-const server = createServer(async (req, res) => {
-  const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^(\.\.[/\\])+/, '');
-  try {
-    const file = await readFile(join(root, path === '/' ? 'deck-app.html' : path));
-    res.writeHead(200, { 'content-type': types[extname(path)] ?? 'application/octet-stream' }).end(file);
-  } catch { res.writeHead(404).end(); }
-}).listen(0);
-await new Promise((r) => server.once('listening', r));
-const url = `http://localhost:${server.address().port}/deck-app.html`;
-
-const browser = engine === 'webkit' ? await webkit.launch() : await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
+const engine = engineFromArgs();
+const site = await startServer();
+const url = `${site.base}/deck-app.html`;
+const browser = await launch(engine);
 const ctx = await browser.newContext({ ...devices['iPhone 14'] });
+// A choice is already made, so the cookie banner doesn't sit over the controls being tested.
+await ctx.addInitScript(() => localStorage.setItem('fd-consent', JSON.stringify({ choice: 'denied', at: Date.now() })));
 const page = await ctx.newPage();
 const cdp = engine === 'chromium' ? await ctx.newCDPSession(page) : null;
 
-const results = [];
-const check = (name, ok, extra = '') => { results.push(ok); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${ok || !extra ? '' : '  ' + extra}`); };
+const { check, done } = reporter();
 
 async function swipe(x, y, dx, dy, steps = 10) {
   if (cdp) {
@@ -130,8 +117,7 @@ try {
   }
 } finally {
   await browser.close();
-  server.close();
+  site.close();
 }
 
-console.log(`\n${engine}: ${results.filter(Boolean).length}/${results.length} passed`);
-process.exit(results.every(Boolean) ? 0 : 1);
+process.exit(done(engine) ? 0 : 1);

@@ -9,7 +9,9 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "serve": "python3 -m http.server 8080",
-    "test:e2e": "node e2e/swipe.mjs"
+    "test:e2e": "node e2e/swipe.mjs",
+    "test:e2e:consent": "node e2e/consent.mjs",
+    "test:e2e:pwa": "node e2e/pwa.mjs"
   },
   "engines": {
     "node": ">=22"

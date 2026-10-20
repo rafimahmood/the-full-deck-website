@@ -20,11 +20,17 @@ export function canPlay(game, players) {
         return false;
     return !range.even || players % 2 === 0;
 }
+export const NO_EQUIPMENT_LABEL = 'No equipment needed';
 export function needsNoEquipment(game) {
     return game.setup.trim().toLowerCase() === 'none';
 }
+/** Equipment text for the card. Games that need nothing say so in plain words. */
+export function equipmentLabel(game) {
+    return needsNoEquipment(game) ? NO_EQUIPMENT_LABEL : game.setup;
+}
+/** Equipment text for the list view: the short version where there is one. */
 export function listSetup(game) {
-    return game.setupShort ?? game.setup;
+    return needsNoEquipment(game) ? NO_EQUIPMENT_LABEL : (game.setupShort ?? game.setup);
 }
 export const NO_FILTERS = { cat: 'all', players: null, noEquipment: false };
 export function filterGames(games, f) {

@@ -16,7 +16,7 @@ export interface Game {
   title: string;
   /** As written on the card: "Any", "2", "4+", "6+ (even)". */
   players: string;
-  /** Full equipment text, shown on the card. "None" means no equipment. */
+  /** Full equipment text. "None" means no equipment (shown as "No equipment needed"). */
   setup: string;
   /** Shorter equipment text for the list view, only where the full text is long. */
   setupShort?: string;
@@ -52,12 +52,20 @@ export function canPlay(game: Game, players: number): boolean {
   return !range.even || players % 2 === 0;
 }
 
+export const NO_EQUIPMENT_LABEL = 'No equipment needed';
+
 export function needsNoEquipment(game: Game): boolean {
   return game.setup.trim().toLowerCase() === 'none';
 }
 
+/** Equipment text for the card. Games that need nothing say so in plain words. */
+export function equipmentLabel(game: Game): string {
+  return needsNoEquipment(game) ? NO_EQUIPMENT_LABEL : game.setup;
+}
+
+/** Equipment text for the list view: the short version where there is one. */
 export function listSetup(game: Game): string {
-  return game.setupShort ?? game.setup;
+  return needsNoEquipment(game) ? NO_EQUIPMENT_LABEL : (game.setupShort ?? game.setup);
 }
 
 export interface Filters {
