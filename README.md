@@ -25,6 +25,12 @@ The pages are plain static HTML and CSS. The deck's game data and logic are Type
 - `favicon.svg`, `favicon-32.png`, `favicon-192.png` and `apple-touch-icon.png` are linked from every page.
 - `og-image.png` (1200x630) is the Open Graph / Twitter card image for `index.html` and `deck-app.html`. Browsers don't send the `#...` part of a URL, so a shared game link (`deck-app.html#g=charades`) previews as the deck page, not as that one game.
 
+## Analytics, cookies and the installable app
+
+- **Google Analytics (GA4, `G-BNTY8C42YG`)** is loaded only after a visitor presses **Accept** on the cookie banner. Consent Mode v2 is declared with everything denied, and the Google tag is not added to the page, so nothing is sent to Google, until then. Reject (or withdrawing later via the **Cookie settings** link in every footer) switches it off and removes the `_ga` cookies. The choice is kept in `localStorage` for a year. The logic is `src/consent.ts` (unit-tested) and the banner is `src/banner.ts`; both run from `src/site.ts` on every page. `privacy.html` explains it to visitors.
+- **Installable app:** `manifest.json` (start page `/deck-app.html`), the icons (`icon-192.png`, `icon-512.png`, `apple-touch-icon.png`) and the iOS tags in each page's head. `sw.js` is the service worker: pages and scripts are network-first (a deploy shows up straight away), fonts and icons come from the cache, and the deck opens offline. If you add a file the pages load, add it to `PRECACHE` in `sw.js` (a test fails if the list is out of step).
+- Browser tests: `npm run test:e2e:consent` and `npm run test:e2e:pwa` (add `-- chromium` for Chrome). `E2E_BASE=https://thefulldeck.netlify.app npm run test:e2e:consent` runs the consent test against the live site; Google's tag is stubbed in the test, so no test visits reach Analytics.
+
 ## Sign-up flow
 
 The "Notify me" form on `index.html` adds people to a Mailchimp audience.

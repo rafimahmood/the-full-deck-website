@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms & Privacy — The Full Deck</title>
 <meta name="description" content="Terms and privacy for The Full Deck: what the site collects and how it is used.">
-<meta name="theme-color" content="#F6F1E7">
+<meta name="theme-color" content="#B5482A">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Full Deck">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -120,7 +124,7 @@
   <a class="back-link" href="index.html">&larr; Back to home</a>
 
   <div class="logo">The <span>Full</span> <span>Deck</span></div>
-  <div class="updated">Last updated: September 2026</div>
+  <div class="updated">Last updated: October 2026</div>
 
   <h1>Terms & Privacy</h1>
 
@@ -132,7 +136,8 @@
   <p>This website is provided as-is, to share information about The Full Deck and let you sign up to hear about launch. Content, pricing, and product details are subject to change before launch. Nothing on this site is a contract or an offer of sale.</p>
 
   <h2>What we collect</h2>
-  <p>If you submit the email signup form, we collect your email address. We don't collect anything else on this site — no accounts, no payment details, no tracking cookies.</p>
+  <p>If you submit the email signup form, we collect your email address. We don't take accounts or payment details.</p>
+  <p>If you say yes to analytics cookies, we also use Google Analytics to measure visits. Google receives your IP address (used to work out roughly where you are, not stored by Analytics), your browser and device type, the pages you view, how you got to the site, and what you tap on, such as which games you open. We use this only to see how the site is used, and we don't use advertising features or build advertising audiences. If you say no, none of this is collected.</p>
 
   <h2>Why we collect it</h2>
   <p>Solely to send you a one-time notification when The Full Deck is ready to order. We won't send you a recurring newsletter or marketing emails beyond that, and we won't sell or share your email with anyone outside the email service we use to send it.</p>
@@ -147,14 +152,17 @@
     <li>You can ask what data we hold about you at any time.</li>
   </ul>
 
-  <h2>Cookies</h2>
-  <p>This site doesn't use tracking or advertising cookies.</p>
+  <h2 id="cookies">Cookies</h2>
+  <p>We only set cookies if you choose Accept on the cookie banner. Until then, no analytics cookies are set and nothing is sent to Google.</p>
+  <p>If you accept, Google Analytics sets cookies named <code>_ga</code> and <code>_ga_BNTY8C42YG</code> in your browser, which last up to two years, to tell visits apart. Google may process this data on servers outside the UK.</p>
+  <p>You can change your mind at any time: use <button type="button" class="fd-cookie-link" data-cookie-settings>Cookie settings</button> here or in the footer of any page. Choosing Reject switches analytics off and removes the cookies. We ask again after a year.</p>
 
   <h2>Contact</h2>
   <p>Questions about your data or this page — email us at <a href="mailto:hello@thefulldeck.com">hello@thefulldeck.com</a>.</p>
 
-  <footer>THE FULL DECK</footer>
+  <footer>THE FULL DECK &middot; <button type="button" class="fd-cookie-link" data-cookie-settings>Cookie settings</button></footer>
 
 </main>
+<script type="module" src="js/site.js"></script>
 </body>
 </html>

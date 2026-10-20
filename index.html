@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Full Deck — A party deck for every table</title>
 <meta name="description" content="The Full Deck is a deck of party games for any table: word games, dinner games and active games. Free to play online now. Draw a random game, filter by how many of you are playing, and share a link to any game.">
-<meta name="theme-color" content="#F6F1E7">
+<meta name="theme-color" content="#B5482A">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Full Deck">
 <link rel="canonical" href="https://thefulldeck.netlify.app/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
@@ -490,7 +494,7 @@
 <footer>
   <div class="wrap">
     <div class="logo">The <span style="color:var(--brand);">Full</span> <span style="color:var(--brand);">Deck</span></div>
-    <div class="fine">&copy; 2026 The Full Deck. All rights reserved.</div>
+    <div class="fine">&copy; 2026 The Full Deck. All rights reserved. &middot; <button type="button" class="fd-cookie-link" data-cookie-settings>Cookie settings</button></div>
   </div>
 </footer>
 
@@ -625,5 +629,6 @@ btn.addEventListener('click', async () => {
 });
 </script>
 
+<script type="module" src="js/site.js"></script>
 </body>
 </html>

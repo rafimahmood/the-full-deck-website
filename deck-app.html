@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Full Deck — The Deck</title>
 <meta name="description" content="Browse 27 party games for any table. Filter by how many of you are playing, draw a random card, and share a direct link to any game. Free to play online.">
-<meta name="theme-color" content="#F6F1E7">
+<meta name="theme-color" content="#B5482A">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Full Deck">
 <link rel="canonical" href="https://thefulldeck.netlify.app/deck-app.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
@@ -133,6 +137,9 @@
     text-transform:uppercase;
     z-index:30;
   }
+
+  /* <main> holds everything the body used to centre, so it centres its children the same way. */
+  main{ width:100%; display:flex; flex-direction:column; align-items:center; }
 
   /* Keep the logo clear of the fixed Home and theme buttons on narrow screens. */
   @media (max-width:520px){
@@ -751,10 +758,10 @@
 
 </main>
 
-<footer>THE FULL DECK</footer>
+<footer>THE FULL DECK &middot; <button type="button" class="fd-cookie-link" data-cookie-settings>Cookie settings</button></footer>
 
 <script type="module">
-import { Deck, NO_FILTERS, findGameById, listSetup, parseShareHash, rulesHTML, shareHash, shareUrl, swipeDirection, visibleGames } from './js/deck.js';
+import { Deck, NO_FILTERS, equipmentLabel, findGameById, listSetup, parseShareHash, rulesHTML, shareHash, shareUrl, swipeDirection, visibleGames } from './js/deck.js';
 import { GAMES } from './js/games.js';
 
 const $ = (id) => document.getElementById(id);
@@ -828,7 +835,7 @@ function cardHTML(game, enterClass){
           <div class="title">${game.title}</div>
           <button class="share-btn" type="button" data-share="${game.id}" aria-label="Copy a link to ${game.title}">${ICONS.link} Share</button>
         </div>
-        <div class="meta"><span><b>Players</b> ${game.players}</span><span><b>Setup</b> ${game.setup}</span></div>
+        <div class="meta"><span><b>Players</b> ${game.players}</span><span><b>Setup</b> ${equipmentLabel(game)}</span></div>
         ${rulesBlock}
         ${diagramBlock}
       </div>
@@ -1228,5 +1235,6 @@ function openFromHash(){
 window.addEventListener('hashchange', openFromHash);
 </script>
 
+<script type="module" src="js/site.js"></script>
 </body>
 </html>
